@@ -557,12 +557,19 @@ function attachRoomListeners() {
 
     roomRef.child('lastActivity').set(firebase.database.ServerValue.TIMESTAMP);
 
-    if(data.guest && !partnerName) {
-      partnerName = data.guest;
-      scores = data.scores || [0,0];
-      updateFooter(); // 🎯 تحديث Footer باسم الشريك
-      enterLobby();
-    }
+    if(!partnerName) {
+  if(isHost && data.guest) {
+    partnerName = data.guest;
+    scores = data.scores || [0,0];
+    updateFooter();
+    enterLobby();
+  } else if(!isHost && data.host) {
+    partnerName = data.host;
+    scores = data.scores || [0,0];
+    updateFooter();
+    enterLobby();
+  }
+}
 
     if(data.message && data.message.timestamp > (window.lastMessageTime || 0)) {
       window.lastMessageTime = data.message.timestamp;
