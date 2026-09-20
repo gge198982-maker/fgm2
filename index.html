@@ -949,6 +949,45 @@ function spinWheel() {
   requestAnimationFrame(animate);
 }
 function closeWheel() { document.getElementById('wheelOverlay').classList.remove('active'); backToLobby(); }
+  <!-- ... كل الكود السابق ... -->
+
+function closeWheel() { document.getElementById('wheelOverlay').classList.remove('active'); backToLobby(); }
+
+// ============================================
+// 🧹 كود التنظيف التلقائي (أضفه هنا)
+// ============================================
+function cleanupOldRooms() {
+  const oneHourAgo = Date.now() - (60 * 60 * 1000);
+  db.ref('rooms').once('value').then(snapshot => {
+    const rooms = snapshot.val();
+    if(!rooms) return;
+    
+    Object.keys(rooms).forEach(roomId => {
+      const room = rooms[roomId];
+      if(room.lastActivity && room.lastActivity < oneHourAgo) {
+        db.ref('rooms/' + roomId).remove();
+        console.log('🧹 تم حذف غرفة قديمة:', roomId);
+      }
+    });
+  });
+}
+
+// تشغيل التنظيف عند فتح الموقع
+window.addEventListener('load', () => {
+  setTimeout(cleanupOldRooms, 5000);
+  setInterval(cleanupOldRooms, 30 * 60 * 1000);
+});
+
+// حذف الغرفة عند إغلاق الصفحة
+window.addEventListener('beforeunload', () => {
+  if(currentRoomId && roomRef) {
+    roomRef.remove();
+  }
+});
+
+</script>  
+</body>
+</html>
 </script>
 </body>
 </html>
