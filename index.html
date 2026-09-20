@@ -10,109 +10,113 @@
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap');
-:root { --pink:#ff6b9d; --pink-soft:#ffb3d1; --purple:#c44dff; --darker:#0a0612; --text:#f5ecff; --gold:#ffd700; }
+
+:root {
+  --pink: #ff6b9d; --pink-soft: #ffb3d1; --purple: #c44dff;
+  --dark: #1a1028; --darker: #0a0612; --text: #f5ecff; --gold: #ffd700;
+}
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Tajawal',sans-serif; background:var(--darker); color:var(--text); min-height:100vh; overflow-x:hidden; position:relative; }
-body::before { content:''; position:fixed; top:0;left:0;right:0;bottom:0; background:radial-gradient(ellipse at 20% 30%,rgba(196,77,255,0.2) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(255,107,157,0.15) 0%,transparent 50%); pointer-events:none; z-index:0; }
+body { font-family:'Tajawal',sans-serif; background: var(--darker); color: var(--text); min-height:100vh; overflow-x:hidden; position:relative; }
+body::before { content:''; position:fixed; top:0;left:0;right:0;bottom:0; background: radial-gradient(ellipse at 20% 30%, rgba(196,77,255,0.2) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.15) 0%, transparent 50%); pointer-events:none; z-index:0; }
 
 .hearts-bg { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
-.heart-float { position:absolute; animation:floatUp linear infinite; }
-@keyframes floatUp { 0%{transform:translateY(100vh) rotate(0deg);opacity:0;} 10%{opacity:0.25;} 90%{opacity:0.25;} 100%{transform:translateY(-10vh) rotate(360deg);opacity:0;} }
+.heart-float { position:absolute; animation: floatUp linear infinite; }
+@keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity:0; } 10% { opacity:0.25; } 90% { opacity:0.25; } 100% { transform: translateY(-10vh) rotate(360deg); opacity:0; } }
 
 .screen { display:none; position:relative; z-index:1; min-height:100vh; padding:20px 20px 100px; }
 .screen.active { display:flex; flex-direction:column; align-items:center; }
 
-.login-container { max-width:450px; width:100%; margin-top:5vh; text-align:center; padding:35px 25px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:22px; box-shadow:0 15px 40px rgba(0,0,0,0.4); }
-.logo { font-size:65px; margin-bottom:12px; animation:heartBeat 2s ease-in-out infinite; display:inline-block; }
-@keyframes heartBeat { 0%,100%{transform:scale(1);} 15%{transform:scale(1.15);} 30%{transform:scale(1);} 45%{transform:scale(1.1);} 60%{transform:scale(1);} }
-.main-title { font-size:36px; font-weight:900; background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px; }
+.login-container { max-width:450px; width:100%; margin-top:5vh; text-align:center; padding:35px 25px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:22px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+.logo { font-size:65px; margin-bottom:12px; animation: heartBeat 2s ease-in-out infinite; display:inline-block; }
+@keyframes heartBeat { 0%,100% { transform:scale(1); } 15% { transform:scale(1.15); } 30% { transform:scale(1); } 45% { transform:scale(1.1); } 60% { transform:scale(1); } }
+.main-title { font-size:36px; font-weight:900; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px; }
 .sub-title { color:#c0b0d8; font-size:14px; margin-bottom:10px; font-family:'Amiri',serif; font-style:italic; }
-.romantic-quote { font-family:'Amiri',serif; font-size:14px; color:var(--pink-soft); padding:12px 18px; margin:15px 0 22px; background:rgba(255,107,157,0.06); border-radius:12px; border-right:3px solid var(--pink); transition:opacity 0.4s ease; }
+.romantic-quote { font-family:'Amiri',serif; font-size:14px; color:var(--pink-soft); padding:12px 18px; margin:15px 0 22px; background: rgba(255,107,157,0.06); border-radius:12px; border-right:3px solid var(--pink); transition: opacity 0.4s ease; }
 
 .input-group { margin-bottom:14px; text-align:right; }
 .input-group label { display:block; margin-bottom:7px; font-size:14px; color:#d0c0e8; font-weight:600; }
-.input-group input { width:100%; padding:13px 16px; border-radius:12px; border:2px solid rgba(196,77,255,0.25); background:rgba(255,255,255,0.04); color:white; font-size:16px; font-family:'Tajawal'; outline:none; }
+.input-group input { width:100%; padding:13px 16px; border-radius:12px; border:2px solid rgba(196,77,255,0.25); background: rgba(255,255,255,0.04); color:white; font-size:16px; font-family:'Tajawal'; outline:none; transition:border-color 0.2s; }
 .input-group input:focus { border-color:var(--purple); }
 
 .btn { padding:13px 30px; border:none; border-radius:12px; font-family:'Tajawal'; font-size:15px; font-weight:700; cursor:pointer; transition:transform 0.2s; display:inline-flex; align-items:center; gap:8px; justify-content:center; }
 .btn:hover { transform:translateY(-2px); }
 .btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-.btn-primary { background:linear-gradient(135deg,var(--pink),var(--purple)); color:white; width:100%; box-shadow:0 4px 20px rgba(196,77,255,0.35); }
-.btn-secondary { background:rgba(255,255,255,0.05); color:var(--text); border:2px solid rgba(196,77,255,0.25); }
+.btn-primary { background: linear-gradient(135deg, var(--pink), var(--purple)); color:white; width:100%; box-shadow: 0 4px 20px rgba(196,77,255,0.35); }
+.btn-secondary { background: rgba(255,255,255,0.05); color:var(--text); border:2px solid rgba(196,77,255,0.25); }
 .btn-sm { padding:9px 18px; font-size:13px; border-radius:10px; }
-.btn-gold { background:linear-gradient(135deg,#ffd700,#ffaa00); color:#1a1028; }
+.btn-gold { background: linear-gradient(135deg, #ffd700, #ffaa00); color:#1a1028; }
 
 .divider { display:flex; align-items:center; gap:15px; margin:22px 0; color:#8070a0; font-size:13px; }
-.divider::before,.divider::after { content:''; flex:1; height:1px; background:rgba(196,77,255,0.2); }
+.divider::before,.divider::after { content:''; flex:1; height:1px; background: rgba(196,77,255,0.2); }
 
-.room-code { font-size:38px; font-weight:900; letter-spacing:10px; background:linear-gradient(135deg,var(--gold),#ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; padding:18px; border-radius:14px; border:2px dashed rgba(255,215,0,0.4); margin:15px 0; cursor:pointer; }
+.room-code { font-size:38px; font-weight:900; letter-spacing:10px; background: linear-gradient(135deg, var(--gold), #ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; padding:18px; border-radius:14px; border:2px dashed rgba(255,215,0,0.4); margin:15px 0; cursor:pointer; }
 
 .status-msg { padding:11px; border-radius:10px; margin-top:14px; font-size:14px; text-align:center; }
 .status-msg.waiting { background:rgba(255,215,0,0.08); color:var(--gold); }
 .status-msg.error { background:rgba(255,50,50,0.08); color:#ff6b6b; }
 .status-msg.success { background:rgba(50,255,50,0.08); color:#6bff6b; }
 
-.lobby-header { width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-radius:18px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); margin-bottom:22px; flex-wrap:wrap; gap:10px; }
+.lobby-header { width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-radius:18px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); margin-bottom:22px; flex-wrap:wrap; gap:10px; }
 .players-info { display:flex; gap:12px; align-items:center; }
-.player-badge { display:flex; align-items:center; gap:8px; padding:8px 15px; border-radius:25px; background:rgba(255,255,255,0.05); }
+.player-badge { display:flex; align-items:center; gap:8px; padding:8px 15px; border-radius:25px; background: rgba(255,255,255,0.05); }
 .player-badge .dot { width:11px; height:11px; border-radius:50%; }
-.player-badge .dot.p1 { background:var(--pink); box-shadow:0 0 8px var(--pink); }
-.player-badge .dot.p2 { background:var(--purple); box-shadow:0 0 8px var(--purple); }
+.player-badge .dot.p1 { background: var(--pink); box-shadow:0 0 8px var(--pink); }
+.player-badge .dot.p2 { background: var(--purple); box-shadow:0 0 8px var(--purple); }
 .vs-text { font-weight:900; color:var(--gold); font-size:18px; }
-.score-display { font-size:14px; color:#d0c0e8; font-weight:600; padding:7px 14px; border-radius:10px; background:rgba(255,255,255,0.05); }
+.score-display { font-size:14px; color:#d0c0e8; font-weight:600; padding:7px 14px; border-radius:10px; background: rgba(255,255,255,0.05); }
 
-.lobby-title { font-size:22px; font-weight:800; margin-bottom:18px; background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-align:center; width:100%; }
-.games-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:15px; width:100%; max-width:900px; }
-.game-card { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:22px 18px; cursor:pointer; transition:transform 0.25s; text-align:center; }
+.lobby-title { font-size:22px; font-weight:800; margin-bottom:18px; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-align:center; width:100%; }
+.games-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(200px,1fr)); gap:12px; width:100%; max-width:900px; }
+.game-card { background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:18px 14px; cursor:pointer; transition:transform 0.25s; text-align:center; }
 .game-card:hover { transform:translateY(-5px); border-color:var(--purple); }
-.game-card .icon { font-size:40px; margin-bottom:10px; }
-.game-card .name { font-size:17px; font-weight:800; margin-bottom:5px; }
-.game-card .desc { font-size:12px; color:#a090b8; }
+.game-card .icon { font-size:36px; margin-bottom:8px; }
+.game-card .name { font-size:15px; font-weight:800; margin-bottom:4px; }
+.game-card .desc { font-size:11px; color:#a090b8; }
 
-.chat-toggle { position:fixed; bottom:22px; left:22px; width:56px; height:56px; border-radius:50%; background:linear-gradient(135deg,var(--pink),var(--purple)); border:none; color:white; font-size:24px; cursor:pointer; z-index:101; }
+.chat-toggle { position:fixed; bottom:22px; left:22px; width:56px; height:56px; border-radius:50%; background: linear-gradient(135deg, var(--pink), var(--purple)); border:none; color:white; font-size:24px; cursor:pointer; z-index:101; }
 .chat-panel { position:fixed; bottom:90px; left:22px; width:320px; z-index:100; }
-.chat-box { display:none; background:rgba(15,10,24,0.97); border:1px solid rgba(196,77,255,0.3); border-radius:18px; overflow:hidden; }
+.chat-box { display:none; background: rgba(15,10,24,0.97); border:1px solid rgba(196,77,255,0.3); border-radius:18px; overflow:hidden; }
 .chat-box.open { display:flex; flex-direction:column; }
-.chat-header { padding:13px 16px; background:rgba(196,77,255,0.1); font-weight:700; display:flex; justify-content:space-between; }
+.chat-header { padding:13px 16px; background: rgba(196,77,255,0.1); font-weight:700; display:flex; justify-content:space-between; }
 .chat-messages { height:260px; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:8px; }
 .chat-msg { max-width:80%; padding:9px 13px; border-radius:13px; font-size:13px; word-wrap:break-word; }
-.chat-msg.mine { align-self:flex-end; background:linear-gradient(135deg,var(--pink),var(--purple)); }
-.chat-msg.theirs { align-self:flex-start; background:rgba(255,255,255,0.08); }
+.chat-msg.mine { align-self:flex-end; background: linear-gradient(135deg, var(--pink), var(--purple)); }
+.chat-msg.theirs { align-self:flex-start; background: rgba(255,255,255,0.08); }
 .chat-msg .sender { font-size:10px; opacity:0.7; margin-bottom:2px; font-weight:700; }
 .chat-input-area { display:flex; gap:7px; padding:10px; border-top:1px solid rgba(196,77,255,0.2); }
-.chat-input-area input { flex:1; padding:9px 12px; border-radius:10px; border:1px solid rgba(196,77,255,0.3); background:rgba(255,255,255,0.05); color:white; font-family:'Tajawal'; font-size:13px; outline:none; }
-.chat-input-area button { padding:9px 14px; border-radius:10px; border:none; background:linear-gradient(135deg,var(--pink),var(--purple)); color:white; cursor:pointer; }
+.chat-input-area input { flex:1; padding:9px 12px; border-radius:10px; border:1px solid rgba(196,77,255,0.3); background: rgba(255,255,255,0.05); color:white; font-family:'Tajawal'; font-size:13px; outline:none; }
+.chat-input-area button { padding:9px 14px; border-radius:10px; border:none; background: linear-gradient(135deg, var(--pink), var(--purple)); color:white; cursor:pointer; }
 
-.game-area { width:100%; max-width:700px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:24px; }
+.game-area { width:100%; max-width:700px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:24px; }
 .game-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; padding-bottom:13px; border-bottom:1px solid rgba(196,77,255,0.15); }
-.game-title { font-size:20px; font-weight:800; background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.game-status { padding:6px 14px; border-radius:18px; font-size:13px; font-weight:700; background:rgba(255,215,0,0.1); color:var(--gold); }
+.game-title { font-size:20px; font-weight:800; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.game-status { padding:6px 14px; border-radius:18px; font-size:13px; font-weight:700; background: rgba(255,215,0,0.1); color:var(--gold); }
 
 .xo-board { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:300px; margin:0 auto; }
-.xo-cell { aspect-ratio:1; border-radius:14px; background:rgba(255,255,255,0.04); border:2px solid rgba(196,77,255,0.2); display:flex; align-items:center; justify-content:center; font-size:42px; font-weight:900; cursor:pointer; }
+.xo-cell { aspect-ratio:1; border-radius:14px; background: rgba(255,255,255,0.04); border:2px solid rgba(196,77,255,0.2); display:flex; align-items:center; justify-content:center; font-size:42px; font-weight:900; cursor:pointer; }
 .xo-cell.x { color:var(--pink); } .xo-cell.o { color:var(--purple); }
 
-.c4-board { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; max-width:380px; margin:0 auto; padding:12px; border-radius:14px; background:rgba(0,0,0,0.2); }
-.c4-cell { aspect-ratio:1; border-radius:50%; background:rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.15); cursor:pointer; }
+.c4-board { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; max-width:380px; margin:0 auto; padding:12px; border-radius:14px; background: rgba(0,0,0,0.2); }
+.c4-cell { aspect-ratio:1; border-radius:50%; background: rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.15); cursor:pointer; }
 .c4-cell.p1 { background:var(--pink); } .c4-cell.p2 { background:var(--purple); }
 
 .rps-choices { display:flex; gap:15px; justify-content:center; margin:22px 0; }
-.rps-btn { width:85px; height:85px; border-radius:50%; background:rgba(255,255,255,0.05); border:3px solid rgba(196,77,255,0.3); font-size:38px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.rps-btn { width:85px; height:85px; border-radius:50%; background: rgba(255,255,255,0.05); border:3px solid rgba(196,77,255,0.3); font-size:38px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 .rps-btn.selected { border-color:var(--gold); }
 
 .memory-board { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; max-width:380px; margin:0 auto; }
-.mem-card { aspect-ratio:1; border-radius:12px; background:linear-gradient(135deg,rgba(196,77,255,0.25),rgba(255,107,157,0.25)); border:2px solid rgba(196,77,255,0.3); display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; }
-.mem-card.flipped,.mem-card.matched { background:rgba(255,255,255,0.08); }
+.mem-card { aspect-ratio:1; border-radius:12px; background: linear-gradient(135deg, rgba(196,77,255,0.25), rgba(255,107,157,0.25)); border:2px solid rgba(196,77,255,0.3); display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; }
+.mem-card.flipped, .mem-card.matched { background: rgba(255,255,255,0.08); }
 .mem-card.matched { border-color:var(--gold); opacity:0.7; }
 .mem-card .front { display:none; }
-.mem-card.flipped .front,.mem-card.matched .front { display:block; }
+.mem-card.flipped .front, .mem-card.matched .front { display:block; }
 .mem-card .back { font-size:22px; }
-.mem-card.flipped .back,.mem-card.matched .back { display:none; }
+.mem-card.flipped .back, .mem-card.matched .back { display:none; }
 
-.speed-question { text-align:center; padding:25px; font-size:26px; font-weight:800; background:rgba(255,255,255,0.05); border-radius:16px; margin:15px 0; }
-.speed-input { width:100%; max-width:280px; padding:13px; border-radius:12px; border:2px solid rgba(196,77,255,0.3); background:rgba(255,255,255,0.05); color:white; font-size:20px; text-align:center; font-family:'Tajawal'; outline:none; margin:10px auto; display:block; }
+.speed-question { text-align:center; padding:25px; font-size:26px; font-weight:800; background: rgba(255,255,255,0.05); border-radius:16px; margin:15px 0; }
+.speed-input { width:100%; max-width:280px; padding:13px; border-radius:12px; border:2px solid rgba(196,77,255,0.3); background: rgba(255,255,255,0.05); color:white; font-size:20px; text-align:center; font-family:'Tajawal'; outline:none; margin:10px auto; display:block; }
 .speed-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:380px; margin:15px auto; }
-.speed-opt { padding:14px; border-radius:12px; background:rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.2); cursor:pointer; font-size:15px; font-weight:600; }
+.speed-opt { padding:14px; border-radius:12px; background: rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.2); cursor:pointer; font-size:15px; font-weight:600; }
 .speed-opt.correct { border-color:#4ade80; background:rgba(74,222,128,0.15); }
 .speed-opt.wrong { border-color:#f87171; background:rgba(248,113,113,0.15); }
 
@@ -121,36 +125,126 @@ body::before { content:''; position:fixed; top:0;left:0;right:0;bottom:0; backgr
 
 .wheel-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.9); z-index:200; flex-direction:column; align-items:center; justify-content:center; padding:20px; overflow-y:auto; }
 .wheel-overlay.active { display:flex; }
-.wheel-title { font-size:28px; font-weight:900; margin-bottom:10px; background:linear-gradient(135deg,var(--gold),#ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-align:center; }
+.wheel-title { font-size:28px; font-weight:900; margin-bottom:10px; background: linear-gradient(135deg, var(--gold), #ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-align:center; }
 .wheel-subtitle { color:#c0b0d8; margin-bottom:15px; font-size:14px; text-align:center; }
 .wheel-container { position:relative; width:300px; height:300px; margin-bottom:22px; }
 .wheel-canvas { width:300px; height:300px; }
 .wheel-pointer { position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:35px; }
-.wheel-result { font-size:17px; font-weight:700; text-align:center; padding:16px 24px; border-radius:14px; background:rgba(255,215,0,0.1); border:2px solid rgba(255,215,0,0.3); color:var(--gold); max-width:400px; margin-bottom:18px; min-height:55px; display:flex; align-items:center; justify-content:center; }
+.wheel-result { font-size:17px; font-weight:700; text-align:center; padding:16px 24px; border-radius:14px; background: rgba(255,215,0,0.1); border:2px solid rgba(255,215,0,0.3); color:var(--gold); max-width:400px; margin-bottom:18px; min-height:55px; display:flex; align-items:center; justify-content:center; }
 
 .result-modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:150; align-items:center; justify-content:center; }
 .result-modal.active { display:flex; }
-.result-content { background:rgba(26,16,40,0.98); border:1px solid rgba(196,77,255,0.3); border-radius:22px; padding:35px; text-align:center; max-width:400px; width:90%; }
+.result-content { background: rgba(26,16,40,0.98); border:1px solid rgba(196,77,255,0.3); border-radius:22px; padding:35px; text-align:center; max-width:400px; width:90%; }
 .result-emoji { font-size:60px; margin-bottom:12px; }
-.result-text { font-size:24px; font-weight:900; margin-bottom:8px; background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.result-text { font-size:24px; font-weight:900; margin-bottom:8px; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .result-sub { color:#c0b0d8; font-size:14px; margin-bottom:22px; }
 .result-buttons { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 
-.developer-footer { position:fixed; bottom:0; left:0; right:0; padding:10px 15px; background:linear-gradient(180deg,transparent,rgba(10,6,18,0.95)); text-align:center; z-index:50; pointer-events:none; }
-.developer-footer .credit { font-size:13px; color:#a090b8; display:inline-flex; align-items:center; gap:6px; padding:8px 18px; background:rgba(255,255,255,0.03); border:1px solid rgba(196,77,255,0.15); border-radius:18px; flex-wrap:wrap; justify-content:center; }
-.developer-footer .heart-icon { color:var(--pink); animation:heartBeat 2s ease-in-out infinite; display:inline-block; }
-.developer-footer .dev-name { background:linear-gradient(135deg,var(--gold),#ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:700; }
-.developer-footer .lover-name { background:linear-gradient(135deg,var(--pink),var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:700; }
-.developer-footer .love-line { display:none; }
-.developer-footer.connected .love-line { display:inline; }
+/* ============================================
+   🎯 Footer متغير
+   ============================================ */
+.developer-footer { 
+  position:fixed; bottom:0; left:0; right:0; 
+  padding:10px 15px; 
+  background: linear-gradient(180deg, transparent, rgba(10,6,18,0.95)); 
+  text-align:center; z-index:50; pointer-events:none; 
+}
+.developer-footer .credit { 
+  font-size:13px; color:#a090b8; 
+  display:inline-flex; align-items:center; gap:6px; 
+  padding:8px 18px; 
+  background: rgba(255,255,255,0.03); 
+  border:1px solid rgba(196,77,255,0.15); 
+  border-radius:18px; 
+  flex-wrap:wrap; justify-content:center; 
+}
+.developer-footer .heart-icon { 
+  color:var(--pink); 
+  animation: heartBeat 2s ease-in-out infinite; 
+  display:inline-block; 
+}
+.developer-footer .dev-name { 
+  background: linear-gradient(135deg, var(--gold), #ffaa00); 
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
+  font-weight:700; 
+}
+.developer-footer .lover-name { 
+  background: linear-gradient(135deg, var(--pink), var(--purple)); 
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
+  font-weight:700; 
+}
+.developer-footer .love-line {
+  display:none;
+}
+.developer-footer.connected .love-line {
+  display:inline;
+}
+
+/* Dice Game */
+.dice-container { display:flex; gap:30px; justify-content:center; margin:20px 0; }
+.dice {
+  width:100px; height:100px; border-radius:16px;
+  background: rgba(255,255,255,0.08);
+  border:3px solid rgba(196,77,255,0.3);
+  display:flex; align-items:center; justify-content:center;
+  font-size:60px; font-weight:900;
+  transition: transform 0.3s;
+}
+.dice.rolling { animation: diceRoll 0.5s ease infinite; }
+@keyframes diceRoll {
+  0%,100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(90deg) scale(1.1); }
+  50% { transform: rotate(180deg) scale(1); }
+  75% { transform: rotate(270deg) scale(1.1); }
+}
+
+/* Coin Game */
+.coin {
+  width:120px; height:120px; border-radius:50%;
+  background: linear-gradient(135deg, var(--gold), #ffaa00);
+  display:flex; align-items:center; justify-content:center;
+  font-size:50px; margin:20px auto;
+  box-shadow: 0 0 30px rgba(255,215,0,0.4);
+}
+.coin.flipping { animation: coinFlip 0.6s ease infinite; }
+@keyframes coinFlip {
+  0%,100% { transform: rotateY(0deg); }
+  50% { transform: rotateY(180deg); }
+}
+
+/* Target Game */
+.target-area {
+  position:relative; width:100%; height:350px;
+  background: rgba(255,255,255,0.03);
+  border:2px solid rgba(196,77,255,0.2);
+  border-radius:16px; overflow:hidden;
+  margin:15px 0;
+}
+.target {
+  position:absolute; width:50px; height:50px;
+  border-radius:50%;
+  background: radial-gradient(circle, var(--pink) 30%, var(--purple) 70%);
+  cursor:pointer;
+  animation: targetPop 0.3s ease;
+  box-shadow: 0 0 20px rgba(255,107,157,0.6);
+}
+@keyframes targetPop {
+  from { transform: scale(0); }
+  to { transform: scale(1); }
+}
 
 @media(max-width:600px) {
   .games-grid { grid-template-columns:1fr 1fr; gap:10px; }
-  .game-card { padding:16px 10px; } .game-card .icon { font-size:30px; } .game-card .name { font-size:14px; }
+  .game-card { padding:14px 8px; }
+  .game-card .icon { font-size:28px; }
+  .game-card .name { font-size:13px; }
   .chat-panel { width:calc(100% - 40px); left:20px; }
   .lobby-header { flex-direction:column; gap:10px; padding:13px; }
-  .wheel-container,.wheel-canvas { width:260px; height:260px; }
-  .main-title { font-size:28px; } .login-container { padding:25px 18px; } .room-code { font-size:32px; letter-spacing:8px; }
+  .wheel-container, .wheel-canvas { width:260px; height:260px; }
+  .main-title { font-size:28px; }
+  .login-container { padding:25px 18px; }
+  .room-code { font-size:32px; letter-spacing:8px; }
+  .dice { width:80px; height:80px; font-size:45px; }
 }
 </style>
 </head>
@@ -244,6 +338,9 @@ body::before { content:''; position:fixed; top:0;left:0;right:0;bottom:0; backgr
   <button class="btn btn-secondary btn-sm" style="margin-top:15px" onclick="closeWheel()">✅ تم تنفيذ الحكم - لعبة جديدة</button>
 </div>
 
+<!-- ============================================
+     🎯 Footer متغير - يتغير حسب اسم الشريك
+     ============================================ -->
 <div class="developer-footer" id="developerFooter">
   <div class="credit">
     <span>تم انشاء الموقع بواسطة</span>
@@ -266,7 +363,7 @@ const firebaseConfig = {
   messagingSenderId: "45370849931",
   appId: "1:45370849931:web:535c2c8ea39f9b223e328e",
   measurementId: "G-W8B14S5NLQ",
-  databaseURL: "https://love-games-aqil-default-rtdb.europe-west1.firebasedatabase.app"
+  databaseURL: "https://love-games-aqil-default-rtdb.asia-southeast1.firebasedatabase.app"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -276,7 +373,11 @@ const db = firebase.database();
 let myName = '', partnerName = '', isHost = false, myPlayerNum = 0;
 let scores = [0, 0], currentGame = null, gameState = {}, chatOpen = false;
 let currentRoomId = null, roomRef = null, listenersAttached = false;
+let lastWinner = 0;
 
+// ============================================
+// 🎮 15 لعبة! (10 قديمة + 5 جديدة)
+// ============================================
 const GAMES = [
   { id:'xo', icon:'❌⭕', name:'إكس أو', desc:'الكلاسيكية' },
   { id:'c4', icon:'🔴🟣', name:'أربع خطوط', desc:'وصّل 4' },
@@ -288,6 +389,12 @@ const GAMES = [
   { id:'emoji', icon:'😍🎭', name:'الإيموجي', desc:'خمّن' },
   { id:'color', icon:'🎨🌈', name:'الألوان', desc:'طابق' },
   { id:'quiz', icon:'💕❓', name:'كويز الحب', desc:'أسئلة' },
+  // 🆕 ألعاب جديدة
+  { id:'dice', icon:'🎲🎲', name:'النرد', desc:'الأعلى يفوز' },
+  { id:'coin', icon:'🪙✨', name:'العملة', desc:'تخمين' },
+  { id:'guess', icon:'🔢🎯', name:'خمن الرقم', desc:'1 إلى 100' },
+  { id:'higher', icon:'⬆️⬇️', name:'أكبر/أصغر', desc:'من الأعلى؟' },
+  { id:'target', icon:'🎯💥', name:'التصويب', desc:'اضغط بسرعة' },
 ];
 
 const PUNISHMENTS = [
@@ -371,10 +478,13 @@ function generateRoomCode() { return Math.floor(1000 + Math.random() * 9000).toS
 function updateFooter() {
   const footer = document.getElementById('developerFooter');
   const loverNameDisplay = document.getElementById('loverNameDisplay');
+  
   if(partnerName) {
+    // عند الاتصال - يظهر الاسم
     loverNameDisplay.textContent = partnerName;
     footer.classList.add('connected');
   } else {
+    // قبل الاتصال - يخفي جزء الحب
     loverNameDisplay.textContent = '💕';
     footer.classList.remove('connected');
   }
@@ -400,7 +510,7 @@ function createRoom() {
     attachRoomListeners();
   }).catch(err => {
     document.getElementById('createBtn').disabled = false;
-    showStatus('❌ خطأ: ' + err.message,'error');
+    showStatus('❌ تأكد من إعدادات Firebase!','error');
   });
 }
 
@@ -433,7 +543,7 @@ function joinRoom() {
     });
   }).catch(err => {
     document.getElementById('joinBtn').disabled = false;
-    showStatus('❌ خطأ: ' + err.message,'error');
+    showStatus('❌ خطأ في الاتصال','error');
   });
 }
 
@@ -450,7 +560,7 @@ function attachRoomListeners() {
     if(data.guest && !partnerName) {
       partnerName = data.guest;
       scores = data.scores || [0,0];
-      updateFooter();
+      updateFooter(); // 🎯 تحديث Footer باسم الشريك
       enterLobby();
     }
 
@@ -538,6 +648,12 @@ function initGameState(gameId) {
     case 'emoji': return { round:1, maxRounds:5, p1Score:0, p2Score:0, question:null, answered:{} };
     case 'color': return { round:1, maxRounds:5, p1Score:0, p2Score:0, question:null, answered:{} };
     case 'quiz': return { round:1, maxRounds:5, p1Score:0, p2Score:0, question:null, answered:{} };
+    // 🆕 ألعاب جديدة
+    case 'dice': return { round:1, maxRounds:5, p1Score:0, p2Score:0, p1Roll:0, p2Roll:0, rolling:false };
+    case 'coin': return { round:1, maxRounds:5, p1Score:0, p2Score:0, p1Guess:'', p2Guess:'', flipping:false, result:'' };
+    case 'guess': return { round:1, maxRounds:3, p1Score:0, p2Score:0, target:0, p1Guesses:0, p2Guesses:0, p1Done:false, p2Done:false };
+    case 'higher': return { round:1, maxRounds:5, p1Score:0, p2Score:0, p1Num:0, p2Num:0, revealed:false };
+    case 'target': return { round:1, maxRounds:3, p1Score:0, p2Score:0, p1Hits:0, p2Hits:0, phase:'idle', startTime:0 };
     default: return {};
   }
 }
@@ -551,6 +667,12 @@ function initGame(gameId) {
     case 'memory': renderMemory(); break; case 'math': startMathRound(); break;
     case 'reaction': renderReaction(); break; case 'word': startWordRound(); break;
     case 'emoji': startEmojiRound(); break; case 'color': startColorRound(); break; case 'quiz': startQuizRound(); break;
+    // 🆕 ألعاب جديدة
+    case 'dice': renderDice(); break;
+    case 'coin': renderCoin(); break;
+    case 'guess': startGuessRound(); break;
+    case 'higher': renderHigher(); break;
+    case 'target': startTargetRound(); break;
   }
 }
 
@@ -571,6 +693,7 @@ function updateGameStatus() {
 function backToLobby() {
   document.getElementById('resultModal').classList.remove('active');
   document.getElementById('wheelOverlay').classList.remove('active');
+  if(window.targetInterval) clearInterval(window.targetInterval);
   currentGame = null; gameState = {};
   showScreen('screenLobby');
 }
@@ -586,6 +709,7 @@ function endGame(winner) {
   updateScoreDisplay();
   roomRef.update({ scores });
 
+  lastWinner = winner;
   const winnerName = winner === 1 ? (isHost ? myName : partnerName) : (isHost ? partnerName : myName);
   const loserName = winner === 1 ? (isHost ? partnerName : myName) : (isHost ? myName : partnerName);
 
@@ -593,7 +717,10 @@ function endGame(winner) {
     document.getElementById('resultModal').classList.add('active');
     sendMessage({ type:'game_action', data:{ action:'game_end', winner } });
   } else {
-    sendMessage({ type:'wheel_spin', data:{ action:'open_wheel', winner, winnerName, loserName } });
+    sendMessage({ 
+      type:'wheel_spin', 
+      data:{ action:'open_wheel', winner, winnerName, loserName } 
+    });
     openWheelAutomatically(winner, winnerName, loserName);
   }
 }
@@ -605,7 +732,7 @@ function openWheelAutomatically(winner, winnerName, loserName) {
     document.getElementById('wheelSubtitle').textContent = loserName + ' ستنفذ الحكم 💜';
   } else {
     document.getElementById('wheelTitle').textContent = '🎡 العجلة لك! 💕';
-    document.getElementById('wheelSubtitle').textContent = 'أنت الخاسر - لفّ العجلة 💜';
+    document.getElementById('wheelSubtitle').textContent = 'أنتِ الخاسرة - لفّي العجلة 💜';
   }
   document.getElementById('wheelResult').textContent = 'اضغط "لف العجلة" 💕';
   document.getElementById('spinBtn').disabled = false;
@@ -647,6 +774,12 @@ function applyMove(data) {
     case 'math': handleMathMove(data); break; case 'reaction': handleReactionMove(data); break;
     case 'word': handleWordMove(data); break; case 'emoji': handleEmojiMove(data); break;
     case 'color': handleColorMove(data); break; case 'quiz': handleQuizMove(data); break;
+    // 🆕 ألعاب جديدة
+    case 'dice': handleDiceMove(data); break;
+    case 'coin': handleCoinMove(data); break;
+    case 'guess': handleGuessMove(data); break;
+    case 'higher': handleHigherMove(data); break;
+    case 'target': handleTargetMove(data); break;
   }
 }
 
@@ -939,6 +1072,486 @@ function handleQuizMove(data) {
 }
 function checkQuizRound() { if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) { gameState.round++; setTimeout(()=>startQuizRound(), 1300); } }
 
+// ============================================
+// 🆕 GAME 11: DICE (النرد)
+// ============================================
+function renderDice() {
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost?myName:partnerName}: ${gameState.p1Score}</span> - 
+        <span style="color:var(--purple)">${isHost?partnerName:myName}: ${gameState.p2Score}</span>
+      </p>
+      <div class="dice-container">
+        <div class="dice" id="dice1">🎲</div>
+        <div class="dice" id="dice2">🎲</div>
+      </div>
+      <p style="margin:15px 0;">اضغط لرمي النرد!</p>
+      <button class="btn btn-primary btn-sm" id="rollBtn" onclick="rollDice()">🎲 ارمِ النرد!</button>
+      <div id="diceResult" style="margin-top:15px;font-weight:700;min-height:30px;"></div>
+    </div>
+  `;
+}
+
+function rollDice() {
+  if(gameState.rolling) return;
+  gameState.rolling = true;
+  document.getElementById('rollBtn').disabled = true;
+  document.getElementById('dice1').classList.add('rolling');
+  document.getElementById('dice2').classList.add('rolling');
+  
+  const diceEmojis = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+  let count = 0;
+  const anim = setInterval(() => {
+    document.getElementById('dice1').textContent = diceEmojis[Math.floor(Math.random()*6)];
+    document.getElementById('dice2').textContent = diceEmojis[Math.floor(Math.random()*6)];
+    count++;
+    if(count > 10) {
+      clearInterval(anim);
+      const myRoll = Math.floor(Math.random()*6)+1;
+      document.getElementById('dice1').classList.remove('rolling');
+      document.getElementById('dice2').classList.remove('rolling');
+      document.getElementById('dice1').textContent = diceEmojis[myRoll-1];
+      document.getElementById('dice2').textContent = diceEmojis[myRoll-1];
+      
+      gameState.p1Roll = myPlayerNum === 1 ? myRoll : 0;
+      gameState.p2Roll = myPlayerNum === 2 ? myRoll : 0;
+      
+      sendMove({ diceAction:'roll', player:myPlayerNum, roll: myRoll });
+      checkDiceRound();
+    }
+  }, 100);
+}
+
+function handleDiceMove(data) {
+  if(data.diceAction === 'roll') {
+    if(data.player === 1) gameState.p1Roll = data.roll;
+    else gameState.p2Roll = data.roll;
+    
+    const diceEmojis = ['⚀','⚁','⚂','⚃','⚄','⚅'];
+    if(data.player !== myPlayerNum) {
+      document.getElementById('dice2').classList.remove('rolling');
+      document.getElementById('dice2').textContent = diceEmojis[data.roll-1];
+    }
+    checkDiceRound();
+  }
+}
+
+function checkDiceRound() {
+  if(gameState.p1Roll > 0 && gameState.p2Roll > 0) {
+    const r1 = gameState.p1Roll, r2 = gameState.p2Roll;
+    let winner = 0;
+    if(r1 > r2) { winner = 1; gameState.p1Score++; }
+    else if(r2 > r1) { winner = 2; gameState.p2Score++; }
+    
+    const n1 = isHost?myName:partnerName, n2 = isHost?partnerName:myName;
+    const resultEl = document.getElementById('diceResult');
+    resultEl.innerHTML = `${n1}: ${r1} 🆚 ${n2}: ${r2}<br>`;
+    resultEl.innerHTML += winner===0?'تعادل! 🤝': winner===1?`${n1} فاز! 🎉`:`${n2} فاز! 🎉`;
+    
+    gameState.rolling = false;
+    
+    if(gameState.round >= gameState.maxRounds) {
+      setTimeout(() => endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0), 2000);
+    } else {
+      gameState.round++;
+      gameState.p1Roll = 0; gameState.p2Roll = 0;
+      setTimeout(() => {
+        document.getElementById('rollBtn').disabled = false;
+        document.getElementById('dice1').textContent = '🎲';
+        document.getElementById('dice2').textContent = '🎲';
+        document.getElementById('diceResult').innerHTML = '';
+      }, 2000);
+    }
+  } else {
+    document.getElementById('diceResult').textContent = '⏳ بانتظار ' + (partnerName||'الخصم') + '...';
+  }
+}
+
+// ============================================
+// 🆕 GAME 12: COIN (العملة)
+// ============================================
+function renderCoin() {
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost?myName:partnerName}: ${gameState.p1Score}</span> - 
+        <span style="color:var(--purple)">${isHost?partnerName:myName}: ${gameState.p2Score}</span>
+      </p>
+      <div class="coin" id="coin">🪙</div>
+      <p style="margin:15px 0;">تخمين: صورة أم كتابة؟</p>
+      <div style="display:flex;gap:15px;justify-content:center;">
+        <button class="btn btn-secondary btn-sm" onclick="guessCoin('heads')">👑 صورة</button>
+        <button class="btn btn-secondary btn-sm" onclick="guessCoin('tails')">🔢 كتابة</button>
+      </div>
+      <div id="coinResult" style="margin-top:15px;font-weight:700;min-height:30px;"></div>
+    </div>
+  `;
+}
+
+function guessCoin(guess) {
+  if(gameState.flipping) return;
+  gameState.flipping = true;
+  gameState.p1Guess = myPlayerNum === 1 ? guess : '';
+  gameState.p2Guess = myPlayerNum === 2 ? guess : '';
+  
+  const coin = document.getElementById('coin');
+  coin.classList.add('flipping');
+  
+  sendMove({ coinAction:'guess', player:myPlayerNum, guess });
+  
+  if(gameState.p1Guess && gameState.p2Guess) {
+    setTimeout(resolveCoin, 1500);
+  } else {
+    document.getElementById('coinResult').textContent = '⏳ بانتظار ' + (partnerName||'الخصم') + '...';
+  }
+}
+
+function handleCoinMove(data) {
+  if(data.coinAction === 'guess') {
+    if(data.player === 1) gameState.p1Guess = data.guess;
+    else gameState.p2Guess = data.guess;
+    
+    if(gameState.p1Guess && gameState.p2Guess) {
+      setTimeout(resolveCoin, 1500);
+    }
+  }
+}
+
+function resolveCoin() {
+  const result = Math.random() < 0.5 ? 'heads' : 'tails';
+  gameState.result = result;
+  const coin = document.getElementById('coin');
+  coin.classList.remove('flipping');
+  coin.textContent = result === 'heads' ? '👑' : '🔢';
+  
+  const p1Correct = gameState.p1Guess === result;
+  const p2Correct = gameState.p2Guess === result;
+  
+  if(p1Correct && !p2Correct) { gameState.p1Score++; }
+  else if(p2Correct && !p1Correct) { gameState.p2Score++; }
+  
+  const n1 = isHost?myName:partnerName, n2 = isHost?partnerName:myName;
+  const resultEl = document.getElementById('coinResult');
+  resultEl.innerHTML = `النتيجة: ${result === 'heads' ? 'صورة 👑' : 'كتابة 🔢'}<br>`;
+  resultEl.innerHTML += `${n1}: ${gameState.p1Guess === 'heads' ? 'صورة' : 'كتابة'} ${p1Correct?'✅':'❌'}<br>`;
+  resultEl.innerHTML += `${n2}: ${gameState.p2Guess === 'heads' ? 'صورة' : 'كتابة'} ${p2Correct?'✅':'❌'}`;
+  
+  sendMove({ coinAction:'result', result, p1Correct, p2Correct });
+  
+  if(gameState.round >= gameState.maxRounds) {
+    setTimeout(() => endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0), 2500);
+  } else {
+    gameState.round++;
+    gameState.p1Guess = ''; gameState.p2Guess = '';
+    gameState.flipping = false;
+    setTimeout(() => {
+      document.getElementById('coin').textContent = '🪙';
+      document.getElementById('coinResult').innerHTML = '';
+    }, 2500);
+  }
+}
+
+// ============================================
+// 🆕 GAME 13: GUESS (خمن الرقم)
+// ============================================
+function startGuessRound() {
+  if(gameState.round > gameState.maxRounds) { 
+    endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); 
+    return; 
+  }
+  
+  if(isHost) {
+    gameState.target = Math.floor(Math.random()*100)+1;
+    gameState.p1Guesses = 0;
+    gameState.p2Guesses = 0;
+    gameState.p1Done = false;
+    gameState.p2Done = false;
+    sendMove({ guessAction:'newround', round:gameState.round, target:gameState.target });
+  }
+  
+  renderGuessUI();
+}
+
+function renderGuessUI() {
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost?myName:partnerName}: ${gameState.p1Score}</span> - 
+        <span style="color:var(--purple)">${isHost?partnerName:myName}: ${gameState.p2Score}</span>
+      </p>
+      <div class="speed-question">🎯 خمن الرقم (1-100)</div>
+      <p style="color:#a090b8;font-size:13px;">محاولاتك: <span id="myGuesses">0</span></p>
+      <input class="speed-input" type="number" id="guessInput" placeholder="رقم..." min="1" max="100" onkeypress="if(event.key==='Enter')submitGuess()">
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitGuess()">خمن ⚡</button>
+      <div id="guessHint" style="margin-top:15px;font-weight:700;font-size:18px;min-height:30px;"></div>
+    </div>
+  `;
+}
+
+function submitGuess() {
+  if(gameState.p1Done && myPlayerNum === 1) return;
+  if(gameState.p2Done && myPlayerNum === 2) return;
+  
+  const guess = parseInt(document.getElementById('guessInput').value);
+  if(!guess || guess < 1 || guess > 100) return;
+  
+  if(myPlayerNum === 1) gameState.p1Guesses++;
+  else gameState.p2Guesses++;
+  
+  document.getElementById('myGuesses').textContent = myPlayerNum === 1 ? gameState.p1Guesses : gameState.p2Guesses;
+  
+  const hint = guess === gameState.target ? 'correct' : guess < gameState.target ? 'higher' : 'lower';
+  
+  sendMove({ guessAction:'guess', player:myPlayerNum, guess, hint, guesses: myPlayerNum === 1 ? gameState.p1Guesses : gameState.p2Guesses });
+  
+  if(hint === 'correct') {
+    if(myPlayerNum === 1) gameState.p1Done = true;
+    else gameState.p2Done = true;
+    
+    document.getElementById('guessHint').textContent = '✅ صحيح!';
+    document.getElementById('guessHint').style.color = '#4ade80';
+    document.getElementById('guessInput').disabled = true;
+    
+    checkGuessRound();
+  } else {
+    document.getElementById('guessHint').textContent = hint === 'higher' ? '⬆️ أكبر!' : '⬇️ أصغر!';
+    document.getElementById('guessHint').style.color = hint === 'higher' ? '#4ade80' : '#f87171';
+  }
+}
+
+function handleGuessMove(data) {
+  if(data.guessAction === 'newround') {
+    gameState.round = data.round;
+    gameState.target = data.target;
+    gameState.p1Guesses = 0;
+    gameState.p2Guesses = 0;
+    gameState.p1Done = false;
+    gameState.p2Done = false;
+    renderGuessUI();
+  } else if(data.guessAction === 'guess') {
+    if(data.player === 1) {
+      gameState.p1Guesses = data.guesses;
+      if(data.hint === 'correct') gameState.p1Done = true;
+    } else {
+      gameState.p2Guesses = data.guesses;
+      if(data.hint === 'correct') gameState.p2Done = true;
+    }
+    checkGuessRound();
+  }
+}
+
+function checkGuessRound() {
+  if(gameState.p1Done && gameState.p2Done) {
+    // من خمن بمحاولات أقل يفوز
+    let winner = 0;
+    if(gameState.p1Guesses < gameState.p2Guesses) { winner = 1; gameState.p1Score++; }
+    else if(gameState.p2Guesses < gameState.p1Guesses) { winner = 2; gameState.p2Score++; }
+    
+    const n1 = isHost?myName:partnerName, n2 = isHost?partnerName:myName;
+    document.getElementById('guessHint').innerHTML = `
+      ${n1}: ${gameState.p1Guesses} محاولات<br>
+      ${n2}: ${gameState.p2Guesses} محاولات<br>
+      ${winner===0?'تعادل! 🤝':winner===1?n1+' فاز! 🎉':n2+' فاز! 🎉'}
+    `;
+    
+    gameState.round++;
+    setTimeout(() => startGuessRound(), 2500);
+  }
+}
+
+// ============================================
+// 🆕 GAME 14: HIGHER/LOWER (أكبر/أصغر)
+// ============================================
+function renderHigher() {
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost?myName:partnerName}: ${gameState.p1Score}</span> - 
+        <span style="color:var(--purple)">${isHost?partnerName:myName}: ${gameState.p2Score}</span>
+      </p>
+      <div class="speed-question">🎲 رقمك السري</div>
+      <div style="font-size:60px;font-weight:900;margin:20px 0;color:var(--gold);" id="myNumber">?</div>
+      <button class="btn btn-primary btn-sm" onclick="revealMyNumber()">👁️ اكشف رقمك</button>
+      <div id="higherResult" style="margin-top:20px;font-weight:700;min-height:30px;"></div>
+      <button class="btn btn-gold btn-sm" style="margin-top:15px;display:none;" id="revealBothBtn" onclick="revealBothNumbers()">🔓 اكشف الأرقام</button>
+    </div>
+  `;
+  
+  // توليد رقمي
+  const myNum = Math.floor(Math.random()*100)+1;
+  gameState.p1Num = myPlayerNum === 1 ? myNum : 0;
+  gameState.p2Num = myPlayerNum === 2 ? myNum : 0;
+  gameState.revealed = false;
+  
+  sendMove({ higherAction:'num', player:myPlayerNum, num: myNum });
+}
+
+function revealMyNumber() {
+  const myNum = myPlayerNum === 1 ? gameState.p1Num : gameState.p2Num;
+  document.getElementById('myNumber').textContent = myNum;
+  document.getElementById('myNumber').style.color = myPlayerNum === 1 ? 'var(--pink)' : 'var(--purple)';
+  
+  if(gameState.p1Num > 0 && gameState.p2Num > 0) {
+    document.getElementById('revealBothBtn').style.display = 'inline-flex';
+  }
+}
+
+function handleHigherMove(data) {
+  if(data.higherAction === 'num') {
+    if(data.player === 1) gameState.p1Num = data.num;
+    else gameState.p2Num = data.num;
+    
+    if(gameState.p1Num > 0 && gameState.p2Num > 0) {
+      // كلا اللاعبين جاهزان
+    }
+  }
+}
+
+function revealBothNumbers() {
+  if(gameState.revealed) return;
+  gameState.revealed = true;
+  
+  const n1 = gameState.p1Num, n2 = gameState.p2Num;
+  let winner = 0;
+  if(n1 > n2) { winner = 1; gameState.p1Score++; }
+  else if(n2 > n1) { winner = 2; gameState.p2Score++; }
+  
+  const name1 = isHost?myName:partnerName, name2 = isHost?partnerName:myName;
+  document.getElementById('higherResult').innerHTML = `
+    ${name1}: <span style="color:var(--pink);font-size:30px;">${n1}</span><br>
+    ${name2}: <span style="color:var(--purple);font-size:30px;">${n2}</span><br>
+    ${winner===0?'تعادل! 🤝':winner===1?name1+' فاز! 🎉':name2+' فاز! 🎉'}
+  `;
+  
+  sendMove({ higherAction:'reveal', winner });
+  
+  if(gameState.round >= gameState.maxRounds) {
+    setTimeout(() => endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0), 2500);
+  } else {
+    gameState.round++;
+    gameState.p1Num = 0; gameState.p2Num = 0;
+    setTimeout(() => renderHigher(), 2500);
+  }
+}
+
+// ============================================
+// 🆕 GAME 15: TARGET (التصويب)
+// ============================================
+function startTargetRound() {
+  if(gameState.round > gameState.maxRounds) { 
+    endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); 
+    return; 
+  }
+  
+  gameState.p1Hits = 0;
+  gameState.p2Hits = 0;
+  gameState.phase = 'playing';
+  
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost?myName:partnerName}: ${gameState.p1Score}</span> - 
+        <span style="color:var(--purple)">${isHost?partnerName:myName}: ${gameState.p2Score}</span>
+      </p>
+      <p style="margin:10px 0;">🎯 اضغط على الأهداف! الوقت: <span id="targetTime" style="color:var(--gold);font-weight:900;">10</span>ث</p>
+      <p>إصابتك: <span id="myHits" style="color:var(--gold);font-weight:900;">0</span></p>
+      <div class="target-area" id="targetArea"></div>
+      <div id="targetResult" style="margin-top:15px;font-weight:700;"></div>
+    </div>
+  `;
+  
+  sendMove({ targetAction:'start', round:gameState.round });
+  startTargetGame();
+}
+
+function startTargetGame() {
+  const area = document.getElementById('targetArea');
+  let timeLeft = 10;
+  document.getElementById('targetTime').textContent = timeLeft;
+  
+  function spawnTarget() {
+    if(gameState.phase !== 'playing') return;
+    const target = document.createElement('div');
+    target.className = 'target';
+    const maxX = area.offsetWidth - 50;
+    const maxY = area.offsetHeight - 50;
+    target.style.left = Math.random() * maxX + 'px';
+    target.style.top = Math.random() * maxY + 'px';
+    
+    target.onclick = () => {
+      if(gameState.phase !== 'playing') return;
+      gameState.p1Hits++;
+      document.getElementById('myHits').textContent = gameState.p1Hits;
+      target.remove();
+      sendMove({ targetAction:'hit', player:myPlayerNum, hits:gameState.p1Hits });
+    };
+    
+    area.appendChild(target);
+    setTimeout(() => { if(target.parentNode) target.remove(); }, 1500);
+  }
+  
+  window.targetInterval = setInterval(() => {
+    if(gameState.phase === 'playing') spawnTarget();
+  }, 700);
+  
+  const countdown = setInterval(() => {
+    timeLeft--;
+    const timeEl = document.getElementById('targetTime');
+    if(timeEl) timeEl.textContent = timeLeft;
+    if(timeLeft <= 0) {
+      clearInterval(countdown);
+      clearInterval(window.targetInterval);
+      gameState.phase = 'ended';
+      area.innerHTML = '';
+      checkTargetRound();
+    }
+  }, 1000);
+}
+
+function handleTargetMove(data) {
+  if(data.targetAction === 'start') {
+    // الطرف الآخر بدأ أيضاً
+  } else if(data.targetAction === 'hit') {
+    if(data.player === 1) gameState.p1Hits = data.hits;
+    else gameState.p2Hits = data.hits;
+  } else if(data.targetAction === 'end') {
+    if(data.player !== myPlayerNum) {
+      gameState.phase = 'ended';
+      if(data.player === 1) gameState.p1Hits = data.hits;
+      else gameState.p2Hits = data.hits;
+      checkTargetRound();
+    }
+  }
+}
+
+function checkTargetRound() {
+  if(gameState.phase !== 'ended') return;
+  
+  // إرسال نتيجة الطرف الآخر
+  sendMove({ targetAction:'end', player:myPlayerNum, hits:gameState.p1Hits });
+  
+  const h1 = gameState.p1Hits, h2 = gameState.p2Hits;
+  let winner = 0;
+  if(h1 > h2) { winner = 1; gameState.p1Score++; }
+  else if(h2 > h1) { winner = 2; gameState.p2Score++; }
+  
+  const n1 = isHost?myName:partnerName, n2 = isHost?partnerName:myName;
+  document.getElementById('targetResult').innerHTML = `
+    ${n1}: ${h1} إصابات<br>
+    ${n2}: ${h2} إصابات<br>
+    ${winner===0?'تعادل! 🤝':winner===1?n1+' فاز! 🎉':n2+' فاز! 🎉'}
+  `;
+  
+  gameState.round++;
+  setTimeout(() => startTargetRound(), 2500);
+}
+
 // ==================== WHEEL ====================
 let wheelSpinning = false;
 
@@ -966,13 +1579,16 @@ function spinWheel() {
   wheelSpinning = true;
   document.getElementById('spinBtn').disabled = true;
   document.getElementById('wheelResult').textContent = '🎰 جاري اللف...';
+  
   const totalRotation = Math.PI*2*5 + Math.random()*Math.PI*2;
   const duration = 3500, start = performance.now();
+  
   function animate(now) {
     const elapsed = now - start;
     const progress = Math.min(elapsed/duration, 1);
     const eased = 1 - Math.pow(1-progress, 3);
     drawWheel(totalRotation * eased);
+    
     if(progress < 1) {
       requestAnimationFrame(animate);
     } else {
@@ -980,8 +1596,13 @@ function spinWheel() {
       const normalizedAngle = (2*Math.PI - (totalRotation % (2*Math.PI))) % (2*Math.PI);
       const idx = Math.floor(normalizedAngle / arc) % n;
       const punishment = PUNISHMENTS[idx];
+      
       document.getElementById('wheelResult').textContent = punishment;
-      sendMessage({ type: 'wheel_spin', data: { action: 'spin_result', punishment, rotation: totalRotation } });
+      
+      sendMessage({
+        type: 'wheel_spin',
+        data: { action: 'spin_result', punishment, rotation: totalRotation }
+      });
     }
   }
   requestAnimationFrame(animate);
@@ -1006,8 +1627,10 @@ function cleanupOldRooms() {
     });
   });
 }
-setTimeout(cleanupOldRooms, 5000);
-setInterval(cleanupOldRooms, 30 * 60 * 1000);
+window.addEventListener('load', () => {
+  setTimeout(cleanupOldRooms, 5000);
+  setInterval(cleanupOldRooms, 30 * 60 * 1000);
+});
 </script>
 </body>
 </html>
