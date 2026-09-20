@@ -315,7 +315,10 @@ function updateFooter() {
   const f = document.getElementById('developerFooter');
   const l = document.getElementById('loverNameDisplay');
   if (partnerName) {
-    l.textContent = partnerName;
+    // ✅ المنشئ يرى اسم الضيف
+    // ✅ الضيف يرى اسمه هو
+    const displayName = isHost ? partnerName : myName;
+    l.textContent = displayName;
     f.classList.add('connected');
   } else {
     l.textContent = '💕';
