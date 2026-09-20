@@ -4,364 +4,109 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💕 ألعاب الحب - عقيل و فاطمة</title>
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+
+<!-- مكتبات Firebase (إصدار Compat للعمل المباشر في المتصفح) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap');
 
 :root {
-  --pink: #ff6b9d;
-  --pink-soft: #ffb3d1;
-  --purple: #c44dff;
-  --dark: #1a1028;
-  --darker: #0a0612;
-  --glow: 0 0 30px rgba(196,77,255,0.3);
-  --text: #f5ecff;
-  --gold: #ffd700;
+  --pink: #ff6b9d; --pink-soft: #ffb3d1; --purple: #c44dff;
+  --dark: #1a1028; --darker: #0a0612; --text: #f5ecff; --gold: #ffd700;
 }
-
 * { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Tajawal',sans-serif; background: var(--darker); color: var(--text); min-height:100vh; overflow-x:hidden; position:relative; }
+body::before { content:''; position:fixed; top:0;left:0;right:0;bottom:0; background: radial-gradient(ellipse at 20% 30%, rgba(196,77,255,0.2) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.15) 0%, transparent 50%); pointer-events:none; z-index:0; }
 
-body {
-  font-family:'Tajawal',sans-serif;
-  background: var(--darker);
-  color: var(--text);
-  min-height:100vh;
-  overflow-x:hidden;
-}
-
-body::before {
-  content:'';
-  position:fixed;
-  top:0;left:0;right:0;bottom:0;
-  background:
-    radial-gradient(ellipse at 20% 30%, rgba(196,77,255,0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(255,107,157,0.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 90%, rgba(100,100,255,0.1) 0%, transparent 50%);
-  pointer-events:none;
-  z-index:0;
-}
-
-.hearts-bg {
-  position:fixed; top:0; left:0; width:100%; height:100%;
-  pointer-events:none; z-index:0; overflow:hidden;
-}
-.heart-float {
-  position:absolute;
-  animation: floatUp linear infinite;
-}
-@keyframes floatUp {
-  0% { transform: translateY(100vh) rotate(0deg); opacity:0; }
-  10% { opacity:0.25; }
-  90% { opacity:0.25; }
-  100% { transform: translateY(-10vh) rotate(360deg); opacity:0; }
-}
+.hearts-bg { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; overflow:hidden; }
+.heart-float { position:absolute; animation: floatUp linear infinite; }
+@keyframes floatUp { 0% { transform: translateY(100vh) rotate(0deg); opacity:0; } 10% { opacity:0.25; } 90% { opacity:0.25; } 100% { transform: translateY(-10vh) rotate(360deg); opacity:0; } }
 
 .screen { display:none; position:relative; z-index:1; min-height:100vh; padding:20px 20px 100px; }
 .screen.active { display:flex; flex-direction:column; align-items:center; }
 
-.login-container {
-  max-width:450px; width:100%;
-  margin-top:5vh;
-  text-align:center;
-  padding:35px 25px;
-  background: rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:22px;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-}
-
-.logo {
-  font-size:65px;
-  margin-bottom:12px;
-  animation: heartBeat 2s ease-in-out infinite;
-  display:inline-block;
-}
-@keyframes heartBeat {
-  0%,100% { transform:scale(1); }
-  15% { transform:scale(1.15); }
-  30% { transform:scale(1); }
-  45% { transform:scale(1.1); }
-  60% { transform:scale(1); }
-}
-
-.main-title {
-  font-size:36px; font-weight:900;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  margin-bottom:8px;
-}
-
-.sub-title {
-  color:#c0b0d8;
-  font-size:14px;
-  margin-bottom:10px;
-  font-family:'Amiri',serif;
-  font-style:italic;
-}
-
-.romantic-quote {
-  font-family:'Amiri',serif;
-  font-size:14px;
-  color:var(--pink-soft);
-  padding:12px 18px;
-  margin:15px 0 22px;
-  background: rgba(255,107,157,0.06);
-  border-radius:12px;
-  border-right:3px solid var(--pink);
-  transition: opacity 0.4s ease;
-}
+.login-container { max-width:450px; width:100%; margin-top:5vh; text-align:center; padding:35px 25px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:22px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+.logo { font-size:65px; margin-bottom:12px; animation: heartBeat 2s ease-in-out infinite; display:inline-block; }
+@keyframes heartBeat { 0%,100% { transform:scale(1); } 15% { transform:scale(1.15); } 30% { transform:scale(1); } 45% { transform:scale(1.1); } 60% { transform:scale(1); } }
+.main-title { font-size:36px; font-weight:900; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px; }
+.sub-title { color:#c0b0d8; font-size:14px; margin-bottom:10px; font-family:'Amiri',serif; font-style:italic; }
+.romantic-quote { font-family:'Amiri',serif; font-size:14px; color:var(--pink-soft); padding:12px 18px; margin:15px 0 22px; background: rgba(255,107,157,0.06); border-radius:12px; border-right:3px solid var(--pink); transition: opacity 0.4s ease; }
 
 .input-group { margin-bottom:14px; text-align:right; }
-.input-group label {
-  display:block; margin-bottom:7px;
-  font-size:14px; color:#d0c0e8;
-  font-weight:600;
-}
-.input-group input {
-  width:100%; padding:13px 16px; border-radius:12px;
-  border:2px solid rgba(196,77,255,0.25);
-  background: rgba(255,255,255,0.04);
-  color:white; font-size:16px; font-family:'Tajawal';
-  outline:none; transition:border-color 0.2s;
-}
-.input-group input:focus {
-  border-color:var(--purple);
-}
+.input-group label { display:block; margin-bottom:7px; font-size:14px; color:#d0c0e8; font-weight:600; }
+.input-group input { width:100%; padding:13px 16px; border-radius:12px; border:2px solid rgba(196,77,255,0.25); background: rgba(255,255,255,0.04); color:white; font-size:16px; font-family:'Tajawal'; outline:none; transition:border-color 0.2s; }
+.input-group input:focus { border-color:var(--purple); }
 
-.btn {
-  padding:13px 30px; border:none; border-radius:12px;
-  font-family:'Tajawal'; font-size:15px; font-weight:700;
-  cursor:pointer; transition:transform 0.2s;
-  display:inline-flex;
-  align-items:center; gap:8px; justify-content:center;
-}
+.btn { padding:13px 30px; border:none; border-radius:12px; font-family:'Tajawal'; font-size:15px; font-weight:700; cursor:pointer; transition:transform 0.2s; display:inline-flex; align-items:center; gap:8px; justify-content:center; }
 .btn:hover { transform:translateY(-2px); }
 .btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  color:white; width:100%;
-  box-shadow: 0 4px 20px rgba(196,77,255,0.35);
-}
-.btn-secondary {
-  background: rgba(255,255,255,0.05);
-  color:var(--text);
-  border:2px solid rgba(196,77,255,0.25);
-}
+.btn-primary { background: linear-gradient(135deg, var(--pink), var(--purple)); color:white; width:100%; box-shadow: 0 4px 20px rgba(196,77,255,0.35); }
+.btn-secondary { background: rgba(255,255,255,0.05); color:var(--text); border:2px solid rgba(196,77,255,0.25); }
 .btn-sm { padding:9px 18px; font-size:13px; border-radius:10px; }
-.btn-gold {
-  background: linear-gradient(135deg, #ffd700, #ffaa00);
-  color:#1a1028;
-}
+.btn-gold { background: linear-gradient(135deg, #ffd700, #ffaa00); color:#1a1028; }
 
-.divider {
-  display:flex; align-items:center; gap:15px;
-  margin:22px 0; color:#8070a0; font-size:13px;
-}
-.divider::before,.divider::after {
-  content:''; flex:1; height:1px;
-  background: rgba(196,77,255,0.2);
-}
+.divider { display:flex; align-items:center; gap:15px; margin:22px 0; color:#8070a0; font-size:13px; }
+.divider::before,.divider::after { content:''; flex:1; height:1px; background: rgba(196,77,255,0.2); }
 
-.room-code {
-  font-size:38px; font-weight:900; letter-spacing:10px;
-  background: linear-gradient(135deg, var(--gold), #ffaa00);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  padding:18px; border-radius:14px;
-  border:2px dashed rgba(255,215,0,0.4);
-  margin:15px 0;
-  cursor:pointer;
-  transition: transform 0.2s;
-}
-.room-code:hover { transform: scale(1.05); }
+.room-code { font-size:38px; font-weight:900; letter-spacing:10px; background: linear-gradient(135deg, var(--gold), #ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; padding:18px; border-radius:14px; border:2px dashed rgba(255,215,0,0.4); margin:15px 0; cursor:pointer; }
 
-.status-msg {
-  padding:11px; border-radius:10px; margin-top:14px;
-  font-size:14px; text-align:center;
-}
+.status-msg { padding:11px; border-radius:10px; margin-top:14px; font-size:14px; text-align:center; }
 .status-msg.waiting { background:rgba(255,215,0,0.08); color:var(--gold); }
 .status-msg.error { background:rgba(255,50,50,0.08); color:#ff6b6b; }
 .status-msg.success { background:rgba(50,255,50,0.08); color:#6bff6b; }
-.status-msg.info { background:rgba(100,100,255,0.08); color:#a0a0ff; }
 
-/* LOBBY */
-.lobby-header {
-  width:100%; max-width:900px;
-  display:flex; justify-content:space-between; align-items:center;
-  padding:16px 22px; border-radius:18px;
-  background: rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  margin-bottom:22px;
-}
+.lobby-header { width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center; padding:16px 22px; border-radius:18px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); margin-bottom:22px; flex-wrap:wrap; gap:10px; }
 .players-info { display:flex; gap:12px; align-items:center; }
-.player-badge {
-  display:flex; align-items:center; gap:8px;
-  padding:8px 15px; border-radius:25px;
-  background: rgba(255,255,255,0.05);
-}
+.player-badge { display:flex; align-items:center; gap:8px; padding:8px 15px; border-radius:25px; background: rgba(255,255,255,0.05); }
 .player-badge .dot { width:11px; height:11px; border-radius:50%; }
 .player-badge .dot.p1 { background: var(--pink); box-shadow:0 0 8px var(--pink); }
 .player-badge .dot.p2 { background: var(--purple); box-shadow:0 0 8px var(--purple); }
 .vs-text { font-weight:900; color:var(--gold); font-size:18px; }
-.score-display {
-  font-size:14px; color:#d0c0e8; font-weight:600;
-  padding:7px 14px; border-radius:10px;
-  background: rgba(255,255,255,0.05);
-}
+.score-display { font-size:14px; color:#d0c0e8; font-weight:600; padding:7px 14px; border-radius:10px; background: rgba(255,255,255,0.05); }
 
-.lobby-title {
-  font-size:22px; font-weight:800; margin-bottom:18px;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-
-.games-grid {
-  display:grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
-  gap:15px; width:100%; max-width:900px;
-}
-.game-card {
-  background: rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:16px; padding:22px 18px;
-  cursor:pointer; transition:transform 0.25s;
-  text-align:center;
-}
-.game-card:hover {
-  transform:translateY(-5px);
-  border-color:var(--purple);
-}
+.lobby-title { font-size:22px; font-weight:800; margin-bottom:18px; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-align:center; width:100%; }
+.games-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap:15px; width:100%; max-width:900px; }
+.game-card { background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:22px 18px; cursor:pointer; transition:transform 0.25s; text-align:center; }
+.game-card:hover { transform:translateY(-5px); border-color:var(--purple); }
 .game-card .icon { font-size:40px; margin-bottom:10px; }
 .game-card .name { font-size:17px; font-weight:800; margin-bottom:5px; }
 .game-card .desc { font-size:12px; color:#a090b8; }
 
-/* CHAT */
-.chat-toggle {
-  position:fixed; bottom:22px; left:22px;
-  width:56px; height:56px; border-radius:50%;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  border:none; color:white; font-size:24px;
-  cursor:pointer; z-index:101;
-}
+.chat-toggle { position:fixed; bottom:22px; left:22px; width:56px; height:56px; border-radius:50%; background: linear-gradient(135deg, var(--pink), var(--purple)); border:none; color:white; font-size:24px; cursor:pointer; z-index:101; }
 .chat-panel { position:fixed; bottom:90px; left:22px; width:320px; z-index:100; }
-.chat-box {
-  display:none;
-  background: rgba(15,10,24,0.97);
-  border:1px solid rgba(196,77,255,0.3);
-  border-radius:18px; overflow:hidden;
-}
+.chat-box { display:none; background: rgba(15,10,24,0.97); border:1px solid rgba(196,77,255,0.3); border-radius:18px; overflow:hidden; }
 .chat-box.open { display:flex; flex-direction:column; }
-.chat-header {
-  padding:13px 16px;
-  background: rgba(196,77,255,0.1);
-  font-weight:700; display:flex; justify-content:space-between;
-}
-.chat-messages {
-  height:260px; overflow-y:auto; padding:10px;
-  display:flex; flex-direction:column; gap:8px;
-}
-.chat-msg {
-  max-width:80%; padding:9px 13px; border-radius:13px;
-  font-size:13px; word-wrap:break-word;
-}
-.chat-msg.mine {
-  align-self:flex-end;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-}
-.chat-msg.theirs {
-  align-self:flex-start;
-  background: rgba(255,255,255,0.08);
-}
+.chat-header { padding:13px 16px; background: rgba(196,77,255,0.1); font-weight:700; display:flex; justify-content:space-between; }
+.chat-messages { height:260px; overflow-y:auto; padding:10px; display:flex; flex-direction:column; gap:8px; }
+.chat-msg { max-width:80%; padding:9px 13px; border-radius:13px; font-size:13px; word-wrap:break-word; }
+.chat-msg.mine { align-self:flex-end; background: linear-gradient(135deg, var(--pink), var(--purple)); }
+.chat-msg.theirs { align-self:flex-start; background: rgba(255,255,255,0.08); }
 .chat-msg .sender { font-size:10px; opacity:0.7; margin-bottom:2px; font-weight:700; }
-.chat-input-area {
-  display:flex; gap:7px; padding:10px;
-  border-top:1px solid rgba(196,77,255,0.2);
-}
-.chat-input-area input {
-  flex:1; padding:9px 12px; border-radius:10px;
-  border:1px solid rgba(196,77,255,0.3);
-  background: rgba(255,255,255,0.05); color:white;
-  font-family:'Tajawal'; font-size:13px; outline:none;
-}
-.chat-input-area button {
-  padding:9px 14px; border-radius:10px; border:none;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  color:white; cursor:pointer;
-}
+.chat-input-area { display:flex; gap:7px; padding:10px; border-top:1px solid rgba(196,77,255,0.2); }
+.chat-input-area input { flex:1; padding:9px 12px; border-radius:10px; border:1px solid rgba(196,77,255,0.3); background: rgba(255,255,255,0.05); color:white; font-family:'Tajawal'; font-size:13px; outline:none; }
+.chat-input-area button { padding:9px 14px; border-radius:10px; border:none; background: linear-gradient(135deg, var(--pink), var(--purple)); color:white; cursor:pointer; }
 
-/* GAME */
-.game-area {
-  width:100%; max-width:700px;
-  background: rgba(255,255,255,0.04);
-  border:1px solid rgba(255,255,255,0.08);
-  border-radius:20px; padding:24px;
-}
-.game-header {
-  display:flex; justify-content:space-between; align-items:center;
-  margin-bottom:18px; padding-bottom:13px;
-  border-bottom:1px solid rgba(196,77,255,0.15);
-}
-.game-title {
-  font-size:20px; font-weight:800;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
-.game-status {
-  padding:6px 14px; border-radius:18px;
-  font-size:13px; font-weight:700;
-  background: rgba(255,215,0,0.1); color:var(--gold);
-}
+.game-area { width:100%; max-width:700px; background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:20px; padding:24px; }
+.game-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; padding-bottom:13px; border-bottom:1px solid rgba(196,77,255,0.15); }
+.game-title { font-size:20px; font-weight:800; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.game-status { padding:6px 14px; border-radius:18px; font-size:13px; font-weight:700; background: rgba(255,215,0,0.1); color:var(--gold); }
 
-.xo-board {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:8px; max-width:300px; margin:0 auto;
-}
-.xo-cell {
-  aspect-ratio:1; border-radius:14px;
-  background: rgba(255,255,255,0.04);
-  border:2px solid rgba(196,77,255,0.2);
-  display:flex; align-items:center; justify-content:center;
-  font-size:42px; font-weight:900;
-  cursor:pointer;
-}
-.xo-cell.x { color:var(--pink); }
-.xo-cell.o { color:var(--purple); }
+.xo-board { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; max-width:300px; margin:0 auto; }
+.xo-cell { aspect-ratio:1; border-radius:14px; background: rgba(255,255,255,0.04); border:2px solid rgba(196,77,255,0.2); display:flex; align-items:center; justify-content:center; font-size:42px; font-weight:900; cursor:pointer; }
+.xo-cell.x { color:var(--pink); } .xo-cell.o { color:var(--purple); }
 
-.c4-board {
-  display:grid; grid-template-columns:repeat(7,1fr);
-  gap:5px; max-width:380px; margin:0 auto;
-  padding:12px; border-radius:14px;
-  background: rgba(0,0,0,0.2);
-}
-.c4-cell {
-  aspect-ratio:1; border-radius:50%;
-  background: rgba(255,255,255,0.05);
-  border:2px solid rgba(196,77,255,0.15);
-  cursor:pointer;
-}
-.c4-cell.p1 { background:var(--pink); }
-.c4-cell.p2 { background:var(--purple); }
+.c4-board { display:grid; grid-template-columns:repeat(7,1fr); gap:5px; max-width:380px; margin:0 auto; padding:12px; border-radius:14px; background: rgba(0,0,0,0.2); }
+.c4-cell { aspect-ratio:1; border-radius:50%; background: rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.15); cursor:pointer; }
+.c4-cell.p1 { background:var(--pink); } .c4-cell.p2 { background:var(--purple); }
 
 .rps-choices { display:flex; gap:15px; justify-content:center; margin:22px 0; }
-.rps-btn {
-  width:85px; height:85px; border-radius:50%;
-  background: rgba(255,255,255,0.05);
-  border:3px solid rgba(196,77,255,0.3);
-  font-size:38px; cursor:pointer;
-  display:flex; align-items:center; justify-content:center;
-}
+.rps-btn { width:85px; height:85px; border-radius:50%; background: rgba(255,255,255,0.05); border:3px solid rgba(196,77,255,0.3); font-size:38px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
 .rps-btn.selected { border-color:var(--gold); }
 
-.memory-board {
-  display:grid; grid-template-columns:repeat(4,1fr);
-  gap:8px; max-width:380px; margin:0 auto;
-}
-.mem-card {
-  aspect-ratio:1; border-radius:12px;
-  background: linear-gradient(135deg, rgba(196,77,255,0.25), rgba(255,107,157,0.25));
-  border:2px solid rgba(196,77,255,0.3);
-  display:flex; align-items:center; justify-content:center;
-  font-size:28px; cursor:pointer;
-}
+.memory-board { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; max-width:380px; margin:0 auto; }
+.mem-card { aspect-ratio:1; border-radius:12px; background: linear-gradient(135deg, rgba(196,77,255,0.25), rgba(255,107,157,0.25)); border:2px solid rgba(196,77,255,0.3); display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; }
 .mem-card.flipped, .mem-card.matched { background: rgba(255,255,255,0.08); }
 .mem-card.matched { border-color:var(--gold); opacity:0.7; }
 .mem-card .front { display:none; }
@@ -369,201 +114,64 @@ body::before {
 .mem-card .back { font-size:22px; }
 .mem-card.flipped .back, .mem-card.matched .back { display:none; }
 
-.speed-question {
-  text-align:center; padding:25px;
-  font-size:26px; font-weight:800;
-  background: rgba(255,255,255,0.05);
-  border-radius:16px; margin:15px 0;
-}
-.speed-input {
-  width:100%; max-width:280px; padding:13px;
-  border-radius:12px; border:2px solid rgba(196,77,255,0.3);
-  background: rgba(255,255,255,0.05); color:white;
-  font-size:20px; text-align:center;
-  font-family:'Tajawal'; outline:none;
-  margin:10px auto; display:block;
-}
-.speed-options {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:10px; max-width:380px; margin:15px auto;
-}
-.speed-opt {
-  padding:14px; border-radius:12px;
-  background: rgba(255,255,255,0.05);
-  border:2px solid rgba(196,77,255,0.2);
-  cursor:pointer; font-size:15px; font-weight:600;
-}
+.speed-question { text-align:center; padding:25px; font-size:26px; font-weight:800; background: rgba(255,255,255,0.05); border-radius:16px; margin:15px 0; }
+.speed-input { width:100%; max-width:280px; padding:13px; border-radius:12px; border:2px solid rgba(196,77,255,0.3); background: rgba(255,255,255,0.05); color:white; font-size:20px; text-align:center; font-family:'Tajawal'; outline:none; margin:10px auto; display:block; }
+.speed-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; max-width:380px; margin:15px auto; }
+.speed-opt { padding:14px; border-radius:12px; background: rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.2); cursor:pointer; font-size:15px; font-weight:600; }
 .speed-opt.correct { border-color:#4ade80; background:rgba(74,222,128,0.15); }
 .speed-opt.wrong { border-color:#f87171; background:rgba(248,113,113,0.15); }
 
-.reaction-box {
-  width:100%; height:280px; border-radius:18px;
-  display:flex; align-items:center; justify-content:center;
-  font-size:22px; font-weight:700;
-  cursor:pointer; margin:15px 0;
-}
-.reaction-box.waiting { background:#dc2626; }
-.reaction-box.ready { background:#16a34a; }
-.reaction-box.idle { background:rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.3); }
+.reaction-box { width:100%; height:280px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; cursor:pointer; margin:15px 0; }
+.reaction-box.waiting { background:#dc2626; } .reaction-box.ready { background:#16a34a; } .reaction-box.idle { background:rgba(255,255,255,0.05); border:2px solid rgba(196,77,255,0.3); }
 
-.wheel-overlay {
-  display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-  background:rgba(0,0,0,0.9); z-index:200;
-  flex-direction:column; align-items:center; justify-content:center;
-  padding:20px;
-}
+.wheel-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.9); z-index:200; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
 .wheel-overlay.active { display:flex; }
-.wheel-title {
-  font-size:28px; font-weight:900; margin-bottom:10px;
-  background: linear-gradient(135deg, var(--gold), #ffaa00);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
+.wheel-title { font-size:28px; font-weight:900; margin-bottom:10px; background: linear-gradient(135deg, var(--gold), #ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .wheel-container { position:relative; width:300px; height:300px; margin-bottom:22px; }
 .wheel-canvas { width:300px; height:300px; }
-.wheel-pointer {
-  position:absolute; top:-15px; left:50%; transform:translateX(-50%);
-  font-size:35px;
-}
-.wheel-result {
-  font-size:17px; font-weight:700; text-align:center;
-  padding:16px 24px; border-radius:14px;
-  background: rgba(255,215,0,0.1);
-  border:2px solid rgba(255,215,0,0.3);
-  color:var(--gold); max-width:400px;
-  margin-bottom:18px; min-height:55px;
-  display:flex; align-items:center; justify-content:center;
-}
+.wheel-pointer { position:absolute; top:-15px; left:50%; transform:translateX(-50%); font-size:35px; }
+.wheel-result { font-size:17px; font-weight:700; text-align:center; padding:16px 24px; border-radius:14px; background: rgba(255,215,0,0.1); border:2px solid rgba(255,215,0,0.3); color:var(--gold); max-width:400px; margin-bottom:18px; min-height:55px; display:flex; align-items:center; justify-content:center; }
 
-.result-modal {
-  display:none; position:fixed; top:0; left:0; right:0; bottom:0;
-  background:rgba(0,0,0,0.85); z-index:150;
-  align-items:center; justify-content:center;
-}
+.result-modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.85); z-index:150; align-items:center; justify-content:center; }
 .result-modal.active { display:flex; }
-.result-content {
-  background: rgba(26,16,40,0.98);
-  border:1px solid rgba(196,77,255,0.3);
-  border-radius:22px; padding:35px;
-  text-align:center; max-width:400px; width:90%;
-}
+.result-content { background: rgba(26,16,40,0.98); border:1px solid rgba(196,77,255,0.3); border-radius:22px; padding:35px; text-align:center; max-width:400px; width:90%; }
 .result-emoji { font-size:60px; margin-bottom:12px; }
-.result-text {
-  font-size:24px; font-weight:900; margin-bottom:8px;
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-}
+.result-text { font-size:24px; font-weight:900; margin-bottom:8px; background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .result-sub { color:#c0b0d8; font-size:14px; margin-bottom:22px; }
 .result-buttons { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
 
-.developer-footer {
-  position:fixed;
-  bottom:0; left:0; right:0;
-  padding:10px 15px;
-  background: linear-gradient(180deg, transparent, rgba(10,6,18,0.95));
-  text-align:center;
-  z-index:50;
-  pointer-events:none;
-}
-.developer-footer .credit {
-  font-size:12px;
-  color:#a090b8;
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:5px 14px;
-  background: rgba(255,255,255,0.03);
-  border:1px solid rgba(196,77,255,0.15);
-  border-radius:18px;
-  flex-wrap:wrap;
-  justify-content:center;
-}
-.developer-footer .heart-icon {
-  color:var(--pink);
-  animation: heartBeat 2s ease-in-out infinite;
-  display:inline-block;
-}
-.developer-footer .dev-name {
-  background: linear-gradient(135deg, var(--gold), #ffaa00);
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  font-weight:700;
-}
-.developer-footer .lover-name {
-  background: linear-gradient(135deg, var(--pink), var(--purple));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  font-weight:700;
-}
-
-/* Connection Status Indicator */
-.connection-status {
-  position:fixed;
-  top:15px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:8px 16px;
-  border-radius:20px;
-  font-size:12px;
-  font-weight:600;
-  z-index:99;
-  display:none;
-}
-.connection-status.connecting {
-  display:block;
-  background:rgba(255,215,0,0.15);
-  color:var(--gold);
-  border:1px solid rgba(255,215,0,0.3);
-}
-.connection-status.connected {
-  display:block;
-  background:rgba(50,255,50,0.15);
-  color:#6bff6b;
-  border:1px solid rgba(50,255,50,0.3);
-}
-.connection-status.error {
-  display:block;
-  background:rgba(255,50,50,0.15);
-  color:#ff6b6b;
-  border:1px solid rgba(255,50,50,0.3);
-}
+.developer-footer { position:fixed; bottom:0; left:0; right:0; padding:10px 15px; background: linear-gradient(180deg, transparent, rgba(10,6,18,0.95)); text-align:center; z-index:50; pointer-events:none; }
+.developer-footer .credit { font-size:12px; color:#a090b8; display:inline-flex; align-items:center; gap:5px; padding:5px 14px; background: rgba(255,255,255,0.03); border:1px solid rgba(196,77,255,0.15); border-radius:18px; flex-wrap:wrap; justify-content:center; }
+.developer-footer .heart-icon { color:var(--pink); animation: heartBeat 2s ease-in-out infinite; display:inline-block; }
+.developer-footer .dev-name { background: linear-gradient(135deg, var(--gold), #ffaa00); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:700; }
+.developer-footer .lover-name { background: linear-gradient(135deg, var(--pink), var(--purple)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:700; }
 
 @media(max-width:600px) {
   .games-grid { grid-template-columns:1fr 1fr; gap:10px; }
-  .game-card { padding:16px 10px; }
-  .game-card .icon { font-size:30px; }
-  .game-card .name { font-size:14px; }
+  .game-card { padding:16px 10px; } .game-card .icon { font-size:30px; } .game-card .name { font-size:14px; }
   .chat-panel { width:calc(100% - 40px); left:20px; }
   .lobby-header { flex-direction:column; gap:10px; padding:13px; }
-  .wheel-container { width:260px; height:260px; }
-  .wheel-canvas { width:260px; height:260px; }
-  .main-title { font-size:28px; }
-  .login-container { padding:25px 18px; }
-  .room-code { font-size:32px; letter-spacing:8px; }
+  .wheel-container, .wheel-canvas { width:260px; height:260px; }
+  .main-title { font-size:28px; } .login-container { padding:25px 18px; } .room-code { font-size:32px; letter-spacing:8px; }
 }
 </style>
 </head>
 <body>
 
 <div class="hearts-bg" id="heartsBg"></div>
-<div class="connection-status" id="connectionStatus"></div>
 
-<!-- LOGIN -->
 <div class="screen active" id="screenLogin">
   <div class="login-container">
     <div class="logo">💕</div>
     <h1 class="main-title">ألعاب الحب</h1>
     <p class="sub-title">✨ حيث يلتقي الحب بالمرح ✨</p>
-
-    <div class="romantic-quote" id="romanticQuote">
-      "أحبك ليس لما أنت عليه، بل لما أكون عليه عندما أكون معك" 💜
-    </div>
+    <div class="romantic-quote" id="romanticQuote">"أحبك ليس لما أنت عليه، بل لما أكون عليه عندما أكون معك" 💜</div>
 
     <div class="input-group">
-      <label>💜 اسمك يا حبيبي</label>
+      <label>💜 اسمك</label>
       <input type="text" id="playerName" placeholder="اكتب اسمك هنا..." maxlength="15">
     </div>
-
-    <button class="btn btn-primary" id="createBtn" onclick="createRoom()">
-      ✨ إنشاء غرفة جديدة
-    </button>
+    <button class="btn btn-primary" id="createBtn" onclick="createRoom()">✨ إنشاء غرفة جديدة</button>
 
     <div class="divider">💞 أو انضم لحبيبتك 💞</div>
 
@@ -571,16 +179,11 @@ body::before {
       <label>🔑 رمز الغرفة</label>
       <input type="text" id="roomCode" placeholder="0000" maxlength="4" style="text-align:center;letter-spacing:8px;font-size:22px;font-weight:900;" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
     </div>
-
-    <button class="btn btn-secondary" id="joinBtn" style="width:100%" onclick="joinRoom()">
-      🚀 انضم للغرفة
-    </button>
-
+    <button class="btn btn-secondary" id="joinBtn" style="width:100%" onclick="joinRoom()">🚀 انضم للغرفة</button>
     <div id="loginStatus"></div>
   </div>
 </div>
 
-<!-- LOBBY -->
 <div class="screen" id="screenLobby">
   <div class="lobby-header">
     <div class="players-info">
@@ -588,16 +191,12 @@ body::before {
       <span class="vs-text">💞</span>
       <div class="player-badge"><span class="dot p2"></span><span id="p2Name">-</span></div>
     </div>
-    <div class="score-display">
-      🏆 <span id="score1">0</span> - <span id="score2">0</span>
-    </div>
+    <div class="score-display">🏆 <span id="score1">0</span> - <span id="score2">0</span></div>
   </div>
-
   <h2 class="lobby-title">✨ اختاروا لعبة معاً ✨</h2>
   <div class="games-grid" id="gamesGrid"></div>
 </div>
 
-<!-- GAME -->
 <div class="screen" id="screenGame">
   <div class="game-area">
     <div class="game-header">
@@ -609,7 +208,6 @@ body::before {
   </div>
 </div>
 
-<!-- CHAT -->
 <button class="chat-toggle" id="chatToggle" onclick="toggleChat()" style="display:none">💬</button>
 <div class="chat-panel" id="chatPanel">
   <div class="chat-box" id="chatBox">
@@ -625,7 +223,6 @@ body::before {
   </div>
 </div>
 
-<!-- RESULT -->
 <div class="result-modal" id="resultModal">
   <div class="result-content">
     <div class="result-emoji" id="resultEmoji">🏆</div>
@@ -638,7 +235,6 @@ body::before {
   </div>
 </div>
 
-<!-- WHEEL -->
 <div class="wheel-overlay" id="wheelOverlay">
   <div class="wheel-title">🎡 عجلة الأحكام</div>
   <div class="wheel-container">
@@ -650,32 +246,39 @@ body::before {
   <button class="btn btn-secondary btn-sm" style="margin-top:15px" onclick="closeWheel()">✅ تم - لعبة جديدة</button>
 </div>
 
-<!-- FOOTER -->
 <div class="developer-footer">
   <div class="credit">
-    <span>صُنع بكل</span>
-    <span class="heart-icon">❤️</span>
-    <span>بواسطة المطور</span>
-    <span class="dev-name">عقيل</span>
-    <span>من أجل حبيبته</span>
-    <span class="lover-name">فاطمة</span>
-    <span>💕</span>
+    <span>صُنع بكل</span><span class="heart-icon">❤️</span><span>بواسطة المطور</span>
+    <span class="dev-name">عقيل</span><span>من أجل حبيبته</span>
+    <span class="lover-name">فاطمة</span><span>💕</span>
   </div>
 </div>
 
 <script>
+// ============================================
+// 🔥 إعدادات Firebase الخاصة بك (مدمجة وجاهزة)
+// ============================================
+const firebaseConfig = {
+  apiKey: "AIzaSyDkUG16cB2az4fDUpDSpkMS8QXYYRt3xNE",
+  authDomain: "love-games-aqil.firebaseapp.com",
+  projectId: "love-games-aqil",
+  storageBucket: "love-games-aqil.firebasestorage.app",
+  messagingSenderId: "45370849931",
+  appId: "1:45370849931:web:535c2c8ea39f9b223e328e",
+  measurementId: "G-W8B14S5NLQ",
+  // ⚠️ إذا لم يعمل الاتصال، اذهب إلى Firebase Console > Realtime Database وانسخ الرابط الدقيق واستبدله هنا:
+  databaseURL: "https://love-games-aqil-default-rtdb.europe-west1.firebasedatabase.app" 
+};
+// ============================================
+
+// تهيئة Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 // ==================== GLOBAL STATE ====================
-let peer = null;
-let conn = null;
-let myName = '';
-let partnerName = '';
-let isHost = false;
-let myPlayerNum = 0;
-let scores = [0, 0];
-let currentGame = null;
-let gameState = {};
-let chatOpen = false;
-let connectionTimeout = null;
+let myName = '', partnerName = '', isHost = false, myPlayerNum = 0;
+let scores = [0, 0], currentGame = null, gameState = {}, chatOpen = false;
+let currentRoomId = null, roomRef = null, listenersAttached = false;
 
 const GAMES = [
   { id:'xo', icon:'❌⭕', name:'إكس أو', desc:'الكلاسيكية' },
@@ -702,9 +305,7 @@ const PUNISHMENTS = [
   '💌 ارسال اخر خمس ايموجي استخدمتها اة استخدمتيها ',
   '😘 ارسال 10 ايومجي تحبيهم او تحبهم ',
 ];
-
 const WHEEL_COLORS = ['#ff6b9d','#c44dff','#6b5bff','#00d4aa','#ffd700','#ff8c42','#4ecdc4','#ff6b6b','#a855f7','#f472b6'];
-
 const ROMANTIC_QUOTES = [
   '"أحبك ليس لما أنت عليه، بل لما أكون عليه عندما أكون معك" 💜',
   '"في كل نبضة قلب، هناك اسمك يا فاطمة" 💕',
@@ -718,9 +319,7 @@ const ROMANTIC_QUOTES = [
 
 // ==================== INIT ====================
 window.addEventListener('load', () => {
-  createHearts();
-  renderGamesGrid();
-  rotateQuotes();
+  createHearts(); renderGamesGrid(); rotateQuotes();
 });
 
 function createHearts() {
@@ -744,230 +343,19 @@ function rotateQuotes() {
   setInterval(() => {
     const q = ROMANTIC_QUOTES[Math.floor(Math.random()*ROMANTIC_QUOTES.length)];
     quoteEl.style.opacity = '0';
-    setTimeout(() => {
-      quoteEl.textContent = q;
-      quoteEl.style.opacity = '1';
-    }, 300);
+    setTimeout(() => { quoteEl.textContent = q; quoteEl.style.opacity = '1'; }, 300);
   }, 5000);
 }
 
 function renderGamesGrid() {
-  const grid = document.getElementById('gamesGrid');
-  grid.innerHTML = GAMES.map(g => `
-    <div class="game-card" onclick="startGame('${g.id}')">
-      <div class="icon">${g.icon}</div>
-      <div class="name">${g.name}</div>
-      <div class="desc">${g.desc}</div>
-    </div>
-  `).join('');
+  document.getElementById('gamesGrid').innerHTML = GAMES.map(g => 
+    `<div class="game-card" onclick="startGame('${g.id}')"><div class="icon">${g.icon}</div><div class="name">${g.name}</div><div class="desc">${g.desc}</div></div>`
+  ).join('');
 }
 
-// ==================== CONNECTION STATUS ====================
-function setConnectionStatus(msg, type) {
-  const el = document.getElementById('connectionStatus');
-  el.textContent = msg;
-  el.className = 'connection-status ' + type;
-}
-
-function hideConnectionStatus() {
-  document.getElementById('connectionStatus').className = 'connection-status';
-}
-
-// ==================== PEER CONFIG ====================
-function getPeerConfig() {
-  return {
-    debug: 0,
-    secure: true,
-    port: 443,
-    config: {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:stun2.l.google.com:19302' },
-        { urls: 'stun:stun3.l.google.com:19302' },
-        { urls: 'stun:stun4.l.google.com:19302' },
-        { urls: 'stun:stun.cloudflare.com:3478' }
-      ]
-    }
-  };
-}
-
-// ==================== CONNECTION ====================
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-}
-
-function generateRoomCode() {
-  return Math.floor(1000 + Math.random() * 9000).toString();
-}
-
-function createRoom() {
-  myName = document.getElementById('playerName').value.trim();
-  if(!myName) {
-    showStatus('💔 اكتب اسمك أولاً يا حبيبي!','error');
-    return;
-  }
-
-  const code = generateRoomCode();
-  isHost = true;
-  myPlayerNum = 1;
-
-  document.getElementById('createBtn').disabled = true;
-  setConnectionStatus('🔄 جاري إنشاء الغرفة...', 'connecting');
-
-  // Cleanup old peer
-  if(peer) { try { peer.destroy(); } catch(e){} }
-
-  peer = new Peer('lovegame-' + code, getPeerConfig());
-
-  peer.on('open', (id) => {
-    console.log('✅ Peer opened:', id);
-    setConnectionStatus('✅ تم إنشاء الغرفة - بانتظار فاطمة...', 'connected');
-    document.getElementById('loginStatus').innerHTML = `
-      <div class="status-msg success">✨ تم إنشاء غرفة الحب بنجاح!</div>
-      <div class="room-code" onclick="copyCode('${code}')" title="انقر للنسخ">${code}</div>
-      <div class="status-msg waiting">💜 أرسل هذا الرمز لفاطمة<br><small style="opacity:0.7">انقر على الرمز لنسخه</small></div>
-    `;
-  });
-
-  peer.on('connection', (c) => {
-    console.log('✅ Connection received');
-    conn = c;
-    setupConnection();
-  });
-
-  peer.on('error', (err) => {
-    console.error('❌ Peer error:', err);
-    document.getElementById('createBtn').disabled = false;
-    if(err.type === 'unavailable-id') {
-      showStatus('🔄 الرمز مستخدم، جاري المحاولة برمز جديد...','info');
-      setTimeout(() => createRoom(), 1000);
-    } else if(err.type === 'network' || err.type === 'server-error') {
-      setConnectionStatus('❌ مشكلة في الشبكة - جرب VPN أو أعد المحاولة', 'error');
-      showStatus('❌ مشكلة في الاتصال بالخادم. جرب:\n1. تحديث الصفحة\n2. استخدام VPN\n3. متصفح آخر','error');
-    } else {
-      setConnectionStatus('❌ خطأ: ' + err.type, 'error');
-      showStatus('❌ خطأ: ' + err.type,'error');
-    }
-  });
-
-  peer.on('disconnected', () => {
-    console.log('⚠️ Disconnected, reconnecting...');
-    setConnectionStatus('🔄 جاري إعادة الاتصال...', 'connecting');
-    try { peer.reconnect(); } catch(e){}
-  });
-}
-
-function joinRoom() {
-  myName = document.getElementById('playerName').value.trim();
-  const code = document.getElementById('roomCode').value.trim();
-  if(!myName) {
-    showStatus('💔 اكتب اسمك أولاً!','error');
-    return;
-  }
-  if(!code || code.length !== 4) {
-    showStatus('🔑 ادخلي رمز الغرفة (4 أرقام)!','error');
-    return;
-  }
-
-  isHost = false;
-  myPlayerNum = 2;
-
-  document.getElementById('joinBtn').disabled = true;
-  setConnectionStatus('🔄 جاري الاتصال بحبيبك...', 'connecting');
-
-  // Cleanup old peer
-  if(peer) { try { peer.destroy(); } catch(e){} }
-
-  peer = new Peer(undefined, getPeerConfig());
-
-  peer.on('open', () => {
-    console.log('✅ Peer opened, connecting to room...');
-    conn = peer.connect('lovegame-' + code, { reliable: true, serialization: 'json' });
-
-    // Timeout for connection
-    connectionTimeout = setTimeout(() => {
-      if(!conn || !conn.open) {
-        document.getElementById('joinBtn').disabled = false;
-        setConnectionStatus('❌ انتهى الوقت - تأكد من الرمز', 'error');
-        showStatus('💔 لم يتم الاتصال! تأكد أن:\n1. الرمز صحيح\n2. عقيل أنشأ الغرفة بالفعل\n3. كليكما متصلان بالإنترنت','error');
-      }
-    }, 15000);
-  });
-
-  peer.on('error', (err) => {
-    console.error('❌ Peer error:', err);
-    document.getElementById('joinBtn').disabled = false;
-    if(err.type === 'peer-unavailable') {
-      setConnectionStatus('❌ الغرفة غير موجودة - تأكد من الرمز', 'error');
-      showStatus('💔 الغرفة غير موجودة! تأكد من الرمز وأن عقيل أنشأ الغرفة','error');
-    } else if(err.type === 'network' || err.type === 'server-error') {
-      setConnectionStatus('❌ مشكلة في الشبكة', 'error');
-      showStatus('❌ مشكلة في الشبكة. جرب VPN','error');
-    } else {
-      setConnectionStatus('❌ خطأ: ' + err.type, 'error');
-      showStatus('❌ خطأ: ' + err.type,'error');
-    }
-  });
-
-  peer.on('disconnected', () => {
-    console.log('⚠️ Disconnected, reconnecting...');
-    setConnectionStatus('🔄 جاري إعادة الاتصال...', 'connecting');
-    try { peer.reconnect(); } catch(e){}
-  });
-}
-
-function setupConnection() {
-  conn.on('open', () => {
-    console.log('✅ Connection opened!');
-    if(connectionTimeout) clearTimeout(connectionTimeout);
-    setConnectionStatus('✅ تم الاتصال بنجاح!', 'connected');
-    setTimeout(hideConnectionStatus, 3000);
-    send({ type:'join', name: myName, playerNum: myPlayerNum });
-  });
-
-  conn.on('data', (data) => {
-    console.log('📥 Received:', data.type);
-    handleMessage(data);
-  });
-
-  conn.on('close', () => {
-    console.log('❌ Connection closed');
-    setConnectionStatus('💔 انقطع الاتصال', 'error');
-    alert('💔 انقطع الاتصال!');
-    location.reload();
-  });
-
-  conn.on('error', (err) => {
-    console.error('❌ Connection error:', err);
-    setConnectionStatus('❌ خطأ في الاتصال', 'error');
-  });
-}
-
-function copyCode(code) {
-  navigator.clipboard.writeText(code).then(() => {
-    alert('✅ تم نسخ الرمز: ' + code + '\nأرسله لفاطمة 💕');
-  }).catch(() => {
-    // Fallback
-    const input = document.createElement('input');
-    input.value = code;
-    document.body.appendChild(input);
-    input.select();
-    document.execCommand('copy');
-    document.body.removeChild(input);
-    alert('✅ تم نسخ الرمز: ' + code);
-  });
-}
-
-function send(data) {
-  if(conn && conn.open) {
-    try {
-      conn.send(data);
-    } catch(e) {
-      console.error('Send error:', e);
-    }
-  }
 }
 
 function showStatus(msg, type) {
@@ -977,39 +365,111 @@ function showStatus(msg, type) {
   el.style.whiteSpace = 'pre-line';
 }
 
-function handleMessage(data) {
-  switch(data.type) {
-    case 'join':
-      partnerName = data.name;
-      if(isHost) send({ type:'welcome', name: myName, scores });
-      enterLobby();
-      break;
-    case 'welcome':
-      partnerName = data.name;
-      scores = data.scores || [0,0];
-      enterLobby();
-      break;
-    case 'chat':
-      addChatMsg(data.name, data.msg, false);
-      break;
-    case 'start_game':
-      currentGame = data.game;
-      gameState = data.state || {};
-      showScreen('screenGame');
-      initGame(currentGame);
-      break;
-    case 'game_move':
-      handleGameMove(data);
-      break;
-    case 'game_end':
-      break;
-    case 'scores_update':
-      scores = data.scores;
-      updateScoreDisplay();
-      break;
-  }
+function generateRoomCode() { return Math.floor(1000 + Math.random() * 9000).toString(); }
+
+// ==================== FIREBASE LOGIC ====================
+function cleanupListeners() {
+  if(roomRef && listenersAttached) { roomRef.off(); listenersAttached = false; }
 }
 
+function createRoom() {
+  myName = document.getElementById('playerName').value.trim();
+  if(!myName) { showStatus('💔 اكتب اسمك أولاً!','error'); return; }
+
+  const code = generateRoomCode();
+  currentRoomId = code; isHost = true; myPlayerNum = 1;
+  document.getElementById('createBtn').disabled = true;
+  showStatus('🔄 جاري إنشاء الغرفة...', 'waiting');
+
+  roomRef = db.ref('rooms/' + code);
+  roomRef.set({
+    host: myName, hostNum: 1, guest: null, guestNum: null,
+    scores: [0, 0], lastActivity: firebase.database.ServerValue.TIMESTAMP
+  }).then(() => {
+    showStatus(`✨ تم إنشاء الغرفة!\nانقر على الرمز لنسخه`, 'success');
+    document.getElementById('loginStatus').innerHTML += `<div class="room-code" onclick="copyCode('${code}')">${code}</div>`;
+    attachRoomListeners();
+  }).catch(err => {
+    document.getElementById('createBtn').disabled = false;
+    showStatus('❌ تأكد من إعدادات Firebase و Rules!','error');
+    console.error(err);
+  });
+}
+
+function joinRoom() {
+  myName = document.getElementById('playerName').value.trim();
+  const code = document.getElementById('roomCode').value.trim();
+  if(!myName) { showStatus('💔 اكتب اسمك أولاً!','error'); return; }
+  if(!code || code.length !== 4) { showStatus('🔑 ادخلي رمز الغرفة (4 أرقام)!','error'); return; }
+
+  currentRoomId = code; isHost = false; myPlayerNum = 2;
+  document.getElementById('joinBtn').disabled = true;
+  showStatus('🔄 جاري الاتصال...', 'waiting');
+
+  roomRef = db.ref('rooms/' + code);
+  roomRef.once('value').then(snapshot => {
+    const data = snapshot.val();
+    if(!data) {
+      document.getElementById('joinBtn').disabled = false;
+      showStatus('💔 الغرفة غير موجودة! تأكد من الرمز','error'); return;
+    }
+    if(data.guest) {
+      document.getElementById('joinBtn').disabled = false;
+      showStatus('💔 الغرفة ممتلئة بشخصين!','error'); return;
+    }
+
+    roomRef.update({ guest: myName, guestNum: 2, lastActivity: firebase.database.ServerValue.TIMESTAMP }).then(() => {
+      showStatus('✅ تم الاتصال بنجاح!', 'success');
+      setTimeout(() => document.getElementById('loginStatus').innerHTML = '', 2000);
+      attachRoomListeners();
+    });
+  }).catch(err => {
+    document.getElementById('joinBtn').disabled = false;
+    showStatus('❌ خطأ في الاتصال','error');
+  });
+}
+
+function attachRoomListeners() {
+  if(listenersAttached) return;
+  listenersAttached = true;
+
+  roomRef.on('value', snapshot => {
+    const data = snapshot.val();
+    if(!data) return;
+
+    roomRef.child('lastActivity').set(firebase.database.ServerValue.TIMESTAMP);
+
+    if(data.guest && !partnerName) {
+      partnerName = data.guest;
+      scores = data.scores || [0,0];
+      enterLobby();
+    }
+
+    if(data.message && data.message.timestamp > (window.lastMessageTime || 0)) {
+      window.lastMessageTime = data.message.timestamp;
+      if(data.message.sender !== myName) {
+        if(data.message.type === 'chat') addChatMsg(data.message.sender, data.message.text, false);
+        else if(data.message.type === 'game_action') handleGameAction(data.message.data);
+      }
+    }
+
+    if(data.scores) { scores = data.scores; updateScoreDisplay(); }
+  });
+}
+
+function copyCode(code) {
+  navigator.clipboard.writeText(code).then(() => alert('✅ تم نسخ الرمز: ' + code + '\nأرسله لفاطمة 💕')).catch(() => alert('الرمز: ' + code));
+}
+
+function sendMessage(msgData) {
+  if(!roomRef) return;
+  roomRef.child('message').set({
+    sender: myName, type: msgData.type, text: msgData.text || '',
+    data: msgData.data || null, timestamp: firebase.database.ServerValue.TIMESTAMP
+  });
+}
+
+// ==================== LOBBY & CHAT ====================
 function enterLobby() {
   showScreen('screenLobby');
   document.getElementById('p1Name').textContent = isHost ? myName : partnerName;
@@ -1024,7 +484,6 @@ function updateScoreDisplay() {
   document.getElementById('score2').textContent = scores[1];
 }
 
-// ==================== CHAT ====================
 function toggleChat() {
   chatOpen = !chatOpen;
   document.getElementById('chatBox').classList.toggle('open', chatOpen);
@@ -1034,7 +493,7 @@ function sendChat() {
   const input = document.getElementById('chatInput');
   const msg = input.value.trim();
   if(!msg) return;
-  send({ type:'chat', name: myName, msg });
+  sendMessage({ type:'chat', text: msg });
   addChatMsg(myName, msg, true);
   input.value = '';
 }
@@ -1051,8 +510,8 @@ function addChatMsg(sender, msg, isMine) {
 // ==================== GAME MANAGEMENT ====================
 function startGame(gameId) {
   currentGame = gameId;
-  const state = initGameState(gameId);
-  send({ type:'start_game', game: gameId, state });
+  gameState = initGameState(gameId);
+  sendMessage({ type:'game_action', data:{ action:'start_game', game: gameId, state: gameState } });
   showScreen('screenGame');
   initGame(gameId);
 }
@@ -1077,18 +536,11 @@ function initGame(gameId) {
   const game = GAMES.find(g => g.id === gameId);
   document.getElementById('gameTitle').textContent = game.icon + ' ' + game.name;
   updateGameStatus();
-
   switch(gameId) {
-    case 'xo': renderXO(); break;
-    case 'c4': renderC4(); break;
-    case 'rps': renderRPS(); break;
-    case 'memory': renderMemory(); break;
-    case 'math': startMathRound(); break;
-    case 'reaction': renderReaction(); break;
-    case 'word': startWordRound(); break;
-    case 'emoji': startEmojiRound(); break;
-    case 'color': startColorRound(); break;
-    case 'quiz': startQuizRound(); break;
+    case 'xo': renderXO(); break; case 'c4': renderC4(); break; case 'rps': renderRPS(); break;
+    case 'memory': renderMemory(); break; case 'math': startMathRound(); break;
+    case 'reaction': renderReaction(); break; case 'word': startWordRound(); break;
+    case 'emoji': startEmojiRound(); break; case 'color': startColorRound(); break; case 'quiz': startQuizRound(); break;
   }
 }
 
@@ -1096,7 +548,7 @@ function updateGameStatus() {
   const el = document.getElementById('gameStatus');
   if(gameState.turn) {
     const isMyTurn = gameState.turn === myPlayerNum;
-    el.textContent = isMyTurn ? '🎯 دورك!' : '⏳ دور ' + partnerName;
+    el.textContent = isMyTurn ? '🎯 دورك!' : '⏳ دور ' + (partnerName || 'الخصم');
     el.style.background = isMyTurn ? 'rgba(74,222,128,0.15)' : 'rgba(255,215,0,0.15)';
     el.style.color = isMyTurn ? '#4ade80' : 'var(--gold)';
   } else {
@@ -1109,16 +561,14 @@ function updateGameStatus() {
 function backToLobby() {
   document.getElementById('resultModal').classList.remove('active');
   document.getElementById('wheelOverlay').classList.remove('active');
-  currentGame = null;
-  gameState = {};
+  currentGame = null; gameState = {};
   showScreen('screenLobby');
 }
 
 function endGame(winner) {
-  if(winner === 1) scores[0]++;
-  else if(winner === 2) scores[1]++;
+  if(winner === 1) scores[0]++; else if(winner === 2) scores[1]++;
   updateScoreDisplay();
-  send({ type:'scores_update', scores });
+  roomRef.update({ scores });
 
   const modal = document.getElementById('resultModal');
   const winnerName = winner === 1 ? (isHost ? myName : partnerName) : (isHost ? partnerName : myName);
@@ -1133,270 +583,143 @@ function endGame(winner) {
     document.getElementById('resultText').textContent = didIWin ? 'فزت! 🎉' : winnerName + ' فاز/ت!';
     document.getElementById('resultSub').textContent = didIWin ? 'أحسنت يا بطل! 💜' : 'حظ أوفر 🎡';
   }
-
   modal.classList.add('active');
-  send({ type:'game_end', winner });
+  sendMessage({ type:'game_action', data:{ action:'game_end', winner } });
 }
 
-// ==================== GAMES (same as before) ====================
+function handleGameAction(data) {
+  if(!data) return;
+  if(data.action === 'start_game') {
+    currentGame = data.game; gameState = data.state || {};
+    showScreen('screenGame'); initGame(currentGame);
+  } else if(data.action === 'move') {
+    applyMove(data);
+  }
+}
+
+function sendMove(moveData) {
+  sendMessage({ type:'game_action', data:{ action:'move', game: currentGame, ...moveData } });
+}
+
+function applyMove(data) {
+  switch(data.game) {
+    case 'xo': handleXOMove(data); break; case 'c4': handleC4Move(data); break;
+    case 'rps': handleRPSMove(data); break; case 'memory': handleMemMove(data); break;
+    case 'math': handleMathMove(data); break; case 'reaction': handleReactionMove(data); break;
+    case 'word': handleWordMove(data); break; case 'emoji': handleEmojiMove(data); break;
+    case 'color': handleColorMove(data); break; case 'quiz': handleQuizMove(data); break;
+  }
+}
+
+// ==================== GAMES LOGIC (Compact) ====================
 function renderXO() {
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;margin-bottom:15px;">
-      <span style="color:var(--pink);font-weight:700;">❌ ${isHost?myName:partnerName}</span>
-      ضد
-      <span style="color:var(--purple);font-weight:700;">⭕ ${isHost?partnerName:myName}</span>
-    </div>
-    <div class="xo-board">
-      ${Array(9).fill(0).map((_,i) => `<div class="xo-cell" onclick="xoMove(${i})"></div>`).join('')}
-    </div>
-  `;
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;margin-bottom:15px;"><span style="color:var(--pink);font-weight:700;">❌ ${isHost?myName:partnerName}</span> ضد <span style="color:var(--purple);font-weight:700;">⭕ ${isHost?partnerName:myName}</span></div><div class="xo-board">${Array(9).fill(0).map((_,i) => `<div class="xo-cell" onclick="xoMove(${i})"></div>`).join('')}</div>`;
   updateXOBoard();
 }
-
 function xoMove(idx) {
   if(gameState.board[idx] || gameState.turn !== myPlayerNum) return;
   const symbol = myPlayerNum === 1 ? 'X' : 'O';
-  gameState.board[idx] = symbol;
-  gameState.turn = myPlayerNum === 1 ? 2 : 1;
-  send({ type:'game_move', game:'xo', idx, symbol, turn: gameState.turn });
-  updateXOBoard();
-  checkXOWin();
+  gameState.board[idx] = symbol; gameState.turn = myPlayerNum === 1 ? 2 : 1;
+  sendMove({ idx, symbol, turn: gameState.turn }); updateXOBoard(); checkXOWin();
 }
-
-function handleXOMove(data) {
-  gameState.board[data.idx] = data.symbol;
-  gameState.turn = data.turn;
-  updateXOBoard();
-  updateGameStatus();
-  checkXOWin();
-}
-
+function handleXOMove(data) { gameState.board[data.idx] = data.symbol; gameState.turn = data.turn; updateXOBoard(); updateGameStatus(); checkXOWin(); }
 function updateXOBoard() {
-  const cells = document.querySelectorAll('.xo-cell');
-  cells.forEach((cell, i) => {
+  document.querySelectorAll('.xo-cell').forEach((cell, i) => {
     const v = gameState.board[i];
     cell.textContent = v === 'X' ? '✕' : v === 'O' ? '◯' : '';
     cell.className = 'xo-cell' + (v === 'X' ? ' x' : v === 'O' ? ' o' : '');
-  });
-  updateGameStatus();
+  }); updateGameStatus();
 }
-
 function checkXOWin() {
-  const b = gameState.board;
-  const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-  for(const [a,c,d] of lines) {
-    if(b[a] && b[a]===b[c] && b[a]===b[d]) {
-      setTimeout(() => endGame(b[a]==='X' ? 1 : 2), 400);
-      return;
-    }
-  }
+  const b = gameState.board; const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+  for(const [a,c,d] of lines) { if(b[a] && b[a]===b[c] && b[a]===b[d]) { setTimeout(() => endGame(b[a]==='X' ? 1 : 2), 400); return; } }
   if(b.every(c => c)) setTimeout(() => endGame(0), 400);
 }
 
 function renderC4() {
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;margin-bottom:15px;">
-      <span style="color:var(--pink);font-weight:700;">🔴 ${isHost?myName:partnerName}</span>
-      ضد
-      <span style="color:var(--purple);font-weight:700;">🟣 ${isHost?partnerName:myName}</span>
-    </div>
-    <div class="c4-board">
-      ${Array(42).fill(0).map((_,i) => `<div class="c4-cell" onclick="c4Move(${i%7})"></div>`).join('')}
-    </div>
-  `;
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;margin-bottom:15px;"><span style="color:var(--pink);font-weight:700;">🔴 ${isHost?myName:partnerName}</span> ضد <span style="color:var(--purple);font-weight:700;">🟣 ${isHost?partnerName:myName}</span></div><div class="c4-board">${Array(42).fill(0).map((_,i) => `<div class="c4-cell" onclick="c4Move(${i%7})"></div>`).join('')}</div>`;
   updateC4Board();
 }
-
 function c4Move(col) {
   if(gameState.turn !== myPlayerNum) return;
   for(let row=5; row>=0; row--) {
     const idx = row*7+col;
     if(gameState.board[idx] === 0) {
-      gameState.board[idx] = myPlayerNum;
-      gameState.turn = myPlayerNum===1?2:1;
-      send({ type:'game_move', game:'c4', idx, player:myPlayerNum, turn:gameState.turn });
-      updateC4Board();
-      checkC4Win();
-      return;
+      gameState.board[idx] = myPlayerNum; gameState.turn = myPlayerNum===1?2:1;
+      sendMove({ idx, player:myPlayerNum, turn:gameState.turn }); updateC4Board(); checkC4Win(); return;
     }
   }
 }
-
-function handleC4Move(data) {
-  gameState.board[data.idx] = data.player;
-  gameState.turn = data.turn;
-  updateC4Board();
-  updateGameStatus();
-  checkC4Win();
-}
-
+function handleC4Move(data) { gameState.board[data.idx] = data.player; gameState.turn = data.turn; updateC4Board(); updateGameStatus(); checkC4Win(); }
 function updateC4Board() {
-  const cells = document.querySelectorAll('.c4-cell');
-  cells.forEach((cell,i) => {
-    const v = gameState.board[i];
-    cell.className = 'c4-cell' + (v===1?' p1':v===2?' p2':'');
-  });
+  document.querySelectorAll('.c4-cell').forEach((cell,i) => { const v = gameState.board[i]; cell.className = 'c4-cell' + (v===1?' p1':v===2?' p2':''); });
   updateGameStatus();
 }
-
 function checkC4Win() {
-  const b = gameState.board;
-  const dirs = [[0,1],[1,0],[1,1],[1,-1]];
-  for(let r=0;r<6;r++) {
-    for(let c=0;c<7;c++) {
-      if(!b[r*7+c]) continue;
-      for(const [dr,dc] of dirs) {
-        let count=1;
-        for(let k=1;k<4;k++) {
-          const nr=r+dr*k, nc=c+dc*k;
-          if(nr<0||nr>=6||nc<0||nc>=7||b[nr*7+nc]!==b[r*7+c]) break;
-          count++;
-        }
-        if(count>=4) { setTimeout(()=>endGame(b[r*7+c]),400); return; }
-      }
-    }
-  }
+  const b = gameState.board; const dirs = [[0,1],[1,0],[1,1],[1,-1]];
+  for(let r=0;r<6;r++) { for(let c=0;c<7;c++) { if(!b[r*7+c]) continue; for(const [dr,dc] of dirs) { let count=1; for(let k=1;k<4;k++) { const nr=r+dr*k, nc=c+dc*k; if(nr<0||nr>=6||nc<0||nc>=7||b[nr*7+nc]!==b[r*7+c]) break; count++; } if(count>=4) { setTimeout(()=>endGame(b[r*7+c]),400); return; } } } }
   if(b.every(c=>c)) setTimeout(()=>endGame(0),400);
 }
 
 function renderRPS() {
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;">
-      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
-      <p style="font-size:14px;color:#a090b8;">
-        <span style="color:var(--pink)">${gameState.p1Score}</span> - <span style="color:var(--purple)">${gameState.p2Score}</span>
-      </p>
-      <div class="rps-choices">
-        <div class="rps-btn" onclick="rpsChoice('rock')">✊</div>
-        <div class="rps-btn" onclick="rpsChoice('paper')">✋</div>
-        <div class="rps-btn" onclick="rpsChoice('scissors')">✌️</div>
-      </div>
-      <div id="rpsResult" style="margin-top:20px;font-size:18px;font-weight:700;min-height:50px;"></div>
-    </div>
-  `;
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;"><p>الجولة ${gameState.round} من ${gameState.maxRounds}</p><p style="font-size:14px;color:#a090b8;"><span style="color:var(--pink)">${gameState.p1Score}</span> - <span style="color:var(--purple)">${gameState.p2Score}</span></p><div class="rps-choices"><div class="rps-btn" onclick="rpsChoice('rock')">✊</div><div class="rps-btn" onclick="rpsChoice('paper')">✋</div><div class="rps-btn" onclick="rpsChoice('scissors')">✌️</div></div><div id="rpsResult" style="margin-top:20px;font-size:18px;font-weight:700;min-height:50px;"></div></div>`;
 }
-
 function rpsChoice(choice) {
   if(gameState.choices[myPlayerNum]) return;
   gameState.choices[myPlayerNum] = choice;
   document.querySelectorAll('.rps-btn').forEach(b => b.classList.remove('selected'));
   event.target.closest('.rps-btn').classList.add('selected');
-  send({ type:'game_move', game:'rps', choice, player: myPlayerNum });
-
+  sendMove({ choice, player: myPlayerNum });
   if(gameState.choices[1] && gameState.choices[2]) resolveRPS();
-  else document.getElementById('rpsResult').textContent = '⏳ بانتظار ' + partnerName + '...';
+  else document.getElementById('rpsResult').textContent = '⏳ بانتظار ' + (partnerName||'الخصم') + '...';
 }
-
-function handleRPSMove(data) {
-  gameState.choices[data.player] = data.choice;
-  if(gameState.choices[1] && gameState.choices[2]) resolveRPS();
-}
-
+function handleRPSMove(data) { gameState.choices[data.player] = data.choice; if(gameState.choices[1] && gameState.choices[2]) resolveRPS(); }
 function resolveRPS() {
   const c1 = gameState.choices[1], c2 = gameState.choices[2];
   const emojis = {rock:'✊',paper:'✋',scissors:'✌️'};
   let winner = 0;
-  if(c1===c2) winner=0;
-  else if((c1==='rock'&&c2==='scissors')||(c1==='paper'&&c2==='rock')||(c1==='scissors'&&c2==='paper')) winner=1;
-  else winner=2;
-
-  if(winner===1) gameState.p1Score++;
-  else if(winner===2) gameState.p2Score++;
-
+  if(c1===c2) winner=0; else if((c1==='rock'&&c2==='scissors')||(c1==='paper'&&c2==='rock')||(c1==='scissors'&&c2==='paper')) winner=1; else winner=2;
+  if(winner===1) gameState.p1Score++; else if(winner===2) gameState.p2Score++;
   const resultEl = document.getElementById('rpsResult');
   const n1 = isHost?myName:partnerName, n2 = isHost?partnerName:myName;
-  resultEl.innerHTML = `${emojis[c1]} ${n1} ضد ${n2} ${emojis[c2]}<br>`;
-  resultEl.innerHTML += winner===0?'تعادل! 🤝': winner===1?`${n1} فاز! 🎉`:`${n2} فاز! 🎉`;
-
+  resultEl.innerHTML = `${emojis[c1]} ${n1} ضد ${n2} ${emojis[c2]}<br>` + (winner===0?'تعادل! 🤝': winner===1?`${n1} فاز! 🎉`:`${n2} فاز! 🎉`);
   if(gameState.round >= gameState.maxRounds || gameState.p1Score > gameState.maxRounds/2 || gameState.p2Score > gameState.maxRounds/2) {
-    setTimeout(() => {
-      const w = gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0;
-      endGame(w);
-    }, 1800);
-  } else {
-    gameState.round++;
-    gameState.choices = {};
-    setTimeout(() => renderRPS(), 1800);
-  }
+    setTimeout(() => endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0), 1800);
+  } else { gameState.round++; gameState.choices = {}; setTimeout(() => renderRPS(), 1800); }
 }
 
 function shuffleMemoryCards() {
   const emojis = ['💕','💜','💗','🌹','🦋','⭐','🌙','🎀'];
   const pairs = [...emojis,...emojis];
-  for(let i=pairs.length-1;i>0;i--) {
-    const j=Math.floor(Math.random()*(i+1));
-    [pairs[i],pairs[j]]=[pairs[j],pairs[i]];
-  }
+  for(let i=pairs.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [pairs[i],pairs[j]]=[pairs[j],pairs[i]]; }
   return pairs;
 }
-
 function renderMemory() {
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;margin-bottom:15px;">
-      <span style="color:var(--pink)">${isHost?myName:partnerName}: ${gameState.p1Score}</span>
-      -
-      <span style="color:var(--purple)">${isHost?partnerName:myName}: ${gameState.p2Score}</span>
-    </div>
-    <div class="memory-board">
-      ${gameState.cards.map((_,i) => `
-        <div class="mem-card ${gameState.matched.includes(i)?'matched':''}" onclick="memFlip(${i})">
-          <span class="front">${gameState.cards[i]}</span>
-          <span class="back">💜</span>
-        </div>
-      `).join('')}
-    </div>
-  `;
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;margin-bottom:15px;"><span style="color:var(--pink)">${isHost?myName:partnerName}: ${gameState.p1Score}</span> - <span style="color:var(--purple)">${isHost?partnerName:myName}: ${gameState.p2Score}</span></div><div class="memory-board">${gameState.cards.map((_,i) => `<div class="mem-card ${gameState.matched.includes(i)?'matched':''}" onclick="memFlip(${i})"><span class="front">${gameState.cards[i]}</span><span class="back">💜</span></div>`).join('')}</div>`;
   updateMemoryBoard();
 }
-
 function memFlip(idx) {
-  if(gameState.turn !== myPlayerNum) return;
-  if(gameState.flipped.includes(idx) || gameState.matched.includes(idx)) return;
-  if(gameState.flipped.length >= 2) return;
-
+  if(gameState.turn !== myPlayerNum || gameState.flipped.includes(idx) || gameState.matched.includes(idx) || gameState.flipped.length >= 2) return;
   gameState.flipped.push(idx);
-  send({ type:'game_move', game:'memory', action:'flip', idx, turn:gameState.turn });
-  updateMemoryBoard();
-
+  sendMove({ memAction:'flip', idx, turn:gameState.turn }); updateMemoryBoard();
   if(gameState.flipped.length === 2) setTimeout(() => checkMemMatch(), 700);
 }
-
-function handleMemMove(data) {
-  if(data.action === 'flip') {
-    gameState.flipped.push(data.idx);
-    updateMemoryBoard();
-    if(gameState.flipped.length === 2) setTimeout(() => checkMemMatch(), 700);
-  }
-}
-
+function handleMemMove(data) { if(data.memAction === 'flip') { gameState.flipped.push(data.idx); updateMemoryBoard(); if(gameState.flipped.length === 2) setTimeout(() => checkMemMatch(), 700); } }
 function checkMemMatch() {
   const [a,b] = gameState.flipped;
   if(gameState.cards[a] === gameState.cards[b]) {
     gameState.matched.push(a,b);
-    if(gameState.turn === 1) gameState.p1Score++;
-    else gameState.p2Score++;
-    gameState.flipped = [];
-    updateMemoryBoard();
-    send({ type:'game_move', game:'memory', action:'match', matched:[a,b], turn:gameState.turn, p1Score:gameState.p1Score, p2Score:gameState.p2Score });
-
-    if(gameState.matched.length === gameState.cards.length) {
-      setTimeout(() => {
-        const w = gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0;
-        endGame(w);
-      }, 400);
-    }
+    if(gameState.turn === 1) gameState.p1Score++; else gameState.p2Score++;
+    gameState.flipped = []; updateMemoryBoard();
+    sendMove({ memAction:'match', matched:[a,b], turn:gameState.turn, p1Score:gameState.p1Score, p2Score:gameState.p2Score });
+    if(gameState.matched.length === gameState.cards.length) setTimeout(() => endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0), 400);
   } else {
-    gameState.turn = gameState.turn===1?2:1;
-    gameState.flipped = [];
-    send({ type:'game_move', game:'memory', action:'nomatch', turn:gameState.turn });
-    updateMemoryBoard();
-    updateGameStatus();
+    gameState.turn = gameState.turn===1?2:1; gameState.flipped = [];
+    sendMove({ memAction:'nomatch', turn:gameState.turn }); updateMemoryBoard(); updateGameStatus();
   }
 }
-
 function updateMemoryBoard() {
-  const cards = document.querySelectorAll('.mem-card');
-  cards.forEach((card,i) => {
+  document.querySelectorAll('.mem-card').forEach((card,i) => {
     if(gameState.matched.includes(i)) card.classList.add('matched','flipped');
     else if(gameState.flipped.includes(i)) card.classList.add('flipped');
     else card.classList.remove('flipped','matched');
@@ -1404,472 +727,220 @@ function updateMemoryBoard() {
 }
 
 function generateMathQ() {
-  const ops = ['+','-','×'];
-  const op = ops[Math.floor(Math.random()*3)];
+  const ops = ['+','-','×']; const op = ops[Math.floor(Math.random()*3)];
   let a,b,ans;
   if(op==='+') { a=Math.floor(Math.random()*50)+10; b=Math.floor(Math.random()*50)+10; ans=a+b; }
   else if(op==='-') { a=Math.floor(Math.random()*50)+30; b=Math.floor(Math.random()*30)+1; ans=a-b; }
   else { a=Math.floor(Math.random()*12)+2; b=Math.floor(Math.random()*12)+2; ans=a*b; }
   return { q:`${a} ${op} ${b} = ?`, ans };
 }
-
 const WORDS = ['حبيبي','فاطمة','حب','قلب','ورد','نجمة','قمر','سماء','عشق','روح'];
-const EMOJI_QUIZ = [
-  {emoji:'🦁👑',answer:'الأسد الملك'},{emoji:'🧊👸',answer:'فروزن'},{emoji:'🧜‍♀️🌊',answer:'حورية البحر'},
-  {emoji:'🏰💤',answer:'الأميرة النائمة'},{emoji:'🕷️👨',answer:'سبايدر مان'},
-  {emoji:'🦇🌃',answer:'باتمان'},{emoji:'🧙‍♂️💍',answer:'سيد الخواتم'},{emoji:'🚢❄️💔',answer:'تايتانيك'}
-];
-const COLORS = [
-  {name:'أحمر',hex:'#ef4444'},{name:'أزرق',hex:'#3b82f6'},{name:'أخضر',hex:'#22c55e'},
-  {name:'أصفر',hex:'#eab308'},{name:'بنفسجي',hex:'#a855f7'},{name:'برتقالي',hex:'#f97316'},
-  {name:'وردي',hex:'#ec4899'},{name:'أبيض',hex:'#ffffff'}
-];
-const QUIZ_QS = [
-  {q:'ما أجمل شيء في العلاقة؟',opts:['الحب','الثقة','الاحترام','كل ما سبق'],ans:3},
-  {q:'أفضل موعد رومانسي؟',opts:['عشاء','فيلم','مشي','كلها حلوة'],ans:3},
-  {q:'أهم شيء في الحب؟',opts:['الصدق','الاهتمام','الدعم','كل ما سبق'],ans:3},
-  {q:'كيف تعبر عن حبك؟',opts:['كلمات','أفعال','هدايا','كل الطرق'],ans:3},
-];
+const EMOJI_QUIZ = [{emoji:'🦁👑',answer:'الأسد الملك'},{emoji:'🧊👸',answer:'فروزن'},{emoji:'🧜‍♀️🌊',answer:'حورية البحر'},{emoji:'🏰💤',answer:'الأميرة النائمة'},{emoji:'🕷️👨',answer:'سبايدر مان'},{emoji:'🦇🌃',answer:'باتمان'},{emoji:'🧙‍♂️💍',answer:'سيد الخواتم'},{emoji:'🚢❄️💔',answer:'تايتانيك'}];
+const COLORS = [{name:'أحمر',hex:'#ef4444'},{name:'أزرق',hex:'#3b82f6'},{name:'أخضر',hex:'#22c55e'},{name:'أصفر',hex:'#eab308'},{name:'بنفسجي',hex:'#a855f7'},{name:'برتقالي',hex:'#f97316'},{name:'وردي',hex:'#ec4899'},{name:'أبيض',hex:'#ffffff'}];
+const QUIZ_QS = [{q:'ما أجمل شيء في العلاقة؟',opts:['الحب','الثقة','الاحترام','كل ما سبق'],ans:3},{q:'أفضل موعد رومانسي؟',opts:['عشاء','فيلم','مشي','كلها حلوة'],ans:3},{q:'أهم شيء في الحب؟',opts:['الصدق','الاهتمام','الدعم','كل ما سبق'],ans:3},{q:'كيف تعبر عن حبك؟',opts:['كلمات','أفعال','هدايا','كل الطرق'],ans:3}];
 
 function startMathRound() {
-  if(gameState.round > gameState.maxRounds) {
-    const w = gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0;
-    endGame(w); return;
-  }
-  const q = generateMathQ();
-  gameState.question = q;
-  gameState.answered = {};
-  send({ type:'game_move', game:'math', action:'newround', round:gameState.round, q });
-
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;">
-      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
-      <div class="speed-question">${q.q}</div>
-      <input class="speed-input" type="number" id="mathAnswer" placeholder="الإجابة..." onkeypress="if(event.key==='Enter')submitMath()">
-      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitMath()">إرسال ⚡</button>
-      <div id="mathResult" style="margin-top:15px;font-weight:700;"></div>
-    </div>
-  `;
+  if(gameState.round > gameState.maxRounds) { endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); return; }
+  const q = generateMathQ(); gameState.question = q; gameState.answered = {};
+  sendMove({ mathAction:'newround', round:gameState.round, q });
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;"><p>الجولة ${gameState.round} من ${gameState.maxRounds}</p><div class="speed-question">${q.q}</div><input class="speed-input" type="number" id="mathAnswer" placeholder="الإجابة..." onkeypress="if(event.key==='Enter')submitMath()"><button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitMath()">إرسال ⚡</button><div id="mathResult" style="margin-top:15px;font-weight:700;"></div></div>`;
 }
-
 function submitMath() {
   if(gameState.answered[myPlayerNum]) return;
   const ans = parseInt(document.getElementById('mathAnswer').value);
   const correct = ans === gameState.question.ans;
   gameState.answered[myPlayerNum] = correct;
   if(correct) { if(myPlayerNum===1) gameState.p1Score++; else gameState.p2Score++; }
-  send({ type:'game_move', game:'math', action:'answer', player:myPlayerNum, correct });
+  sendMove({ mathAction:'answer', player:myPlayerNum, correct });
   document.getElementById('mathResult').textContent = correct ? '✅ صحيح!' : '❌ خطأ!';
   document.getElementById('mathResult').style.color = correct ? '#4ade80' : '#f87171';
-  document.getElementById('mathAnswer').disabled = true;
-  checkMathRound();
+  document.getElementById('mathAnswer').disabled = true; checkMathRound();
 }
-
 function handleMathMove(data) {
-  if(data.action==='newround') {
-    gameState.round = data.round; gameState.question = data.q; gameState.answered = {};
-    startMathRound();
-  } else if(data.action==='answer') {
-    gameState.answered[data.player] = data.correct;
-    if(data.correct) { if(data.player===1) gameState.p1Score++; else gameState.p2Score++; }
-    checkMathRound();
-  }
+  if(data.mathAction==='newround') { gameState.round = data.round; gameState.question = data.q; gameState.answered = {}; startMathRound(); }
+  else if(data.mathAction==='answer') { gameState.answered[data.player] = data.correct; if(data.correct) { if(data.player===1) gameState.p1Score++; else gameState.p2Score++; } checkMathRound(); }
 }
-
-function checkMathRound() {
-  if(gameState.answered[1] !== undefined && gameState.answered[2] !== undefined) {
-    gameState.round++;
-    setTimeout(() => startMathRound(), 1300);
-  }
-}
+function checkMathRound() { if(gameState.answered[1] !== undefined && gameState.answered[2] !== undefined) { gameState.round++; setTimeout(() => startMathRound(), 1300); } }
 
 let reactionTimeout = null;
-
 function renderReaction() {
-  if(gameState.round > gameState.maxRounds) {
-    const w = gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0;
-    endGame(w); return;
-  }
+  if(gameState.round > gameState.maxRounds) { endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); return; }
   gameState.answered = {};
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;">
-      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
-      <div class="reaction-box idle" id="reactionBox" onclick="reactionClick()">
-        ⏳ انتظر اللون الأخضر...
-      </div>
-      <div id="reactionResult" style="margin-top:15px;font-weight:700;"></div>
-    </div>
-  `;
-
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;"><p>الجولة ${gameState.round} من ${gameState.maxRounds}</p><div class="reaction-box idle" id="reactionBox" onclick="reactionClick()">⏳ انتظر اللون الأخضر...</div><div id="reactionResult" style="margin-top:15px;font-weight:700;"></div></div>`;
   if(isHost) {
     const delay = 2000 + Math.random()*3000;
     reactionTimeout = setTimeout(() => {
-      gameState.phase = 'ready';
-      gameState.startTime = Date.now();
-      send({ type:'game_move', game:'reaction', action:'ready', time: gameState.startTime });
-      const box = document.getElementById('reactionBox');
-      if(box) { box.className='reaction-box ready'; box.textContent='🟢 اضغط الآن!'; }
+      gameState.phase = 'ready'; gameState.startTime = Date.now();
+      sendMove({ reactionAction:'ready', time: gameState.startTime });
+      const box = document.getElementById('reactionBox'); if(box) { box.className='reaction-box ready'; box.textContent='🟢 اضغط الآن!'; }
     }, delay);
   }
 }
-
 function handleReactionMove(data) {
-  if(data.action==='ready') {
-    gameState.phase='ready';
-    gameState.startTime=data.time;
-    const box=document.getElementById('reactionBox');
-    if(box){box.className='reaction-box ready';box.textContent='🟢 اضغط الآن!';}
-  } else if(data.action==='clicked') {
-    gameState.answered[data.player] = data.time;
-    checkReactionRound();
-  }
+  if(data.reactionAction==='ready') { gameState.phase='ready'; gameState.startTime=data.time; const box=document.getElementById('reactionBox'); if(box){box.className='reaction-box ready';box.textContent='🟢 اضغط الآن!';} }
+  else if(data.reactionAction==='clicked') { gameState.answered[data.player] = data.time; checkReactionRound(); }
 }
-
 function reactionClick() {
-  if(gameState.phase!=='ready') return;
-  if(gameState.answered[myPlayerNum]) return;
+  if(gameState.phase!=='ready' || gameState.answered[myPlayerNum]) return;
   const rt = Date.now() - gameState.startTime;
   gameState.answered[myPlayerNum] = rt;
-  send({ type:'game_move', game:'reaction', action:'clicked', player:myPlayerNum, time:rt });
+  sendMove({ reactionAction:'clicked', player:myPlayerNum, time:rt });
   document.getElementById('reactionBox').textContent = `⚡ ${rt}ms`;
   document.getElementById('reactionBox').className = 'reaction-box idle';
   checkReactionRound();
 }
-
 function checkReactionRound() {
   if(gameState.answered[1] && gameState.answered[2]) {
     const t1=gameState.answered[1], t2=gameState.answered[2];
     const winner = t1<t2?1:2;
     if(winner===1) gameState.p1Score++; else gameState.p2Score++;
-    document.getElementById('reactionResult').innerHTML =
-      `<span style="color:var(--pink)">${t1}ms</span> ضد <span style="color:var(--purple)">${t2}ms</span>`;
-    gameState.round++;
-    gameState.answered = {};
-    setTimeout(()=>renderReaction(), 1800);
+    document.getElementById('reactionResult').innerHTML = `<span style="color:var(--pink)">${t1}ms</span> ضد <span style="color:var(--purple)">${t2}ms</span>`;
+    gameState.round++; gameState.answered = {}; setTimeout(()=>renderReaction(), 1800);
   }
 }
 
-function scrambleWord(word) {
-  const arr = word.split('');
-  for(let i=arr.length-1;i>0;i--) {
-    const j=Math.floor(Math.random()*(i+1));
-    [arr[i],arr[j]]=[arr[j],arr[i]];
-  }
-  return arr.join('');
-}
-
+function scrambleWord(word) { const arr = word.split(''); for(let i=arr.length-1;i>0;i--) { const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr.join(''); }
 function startWordRound() {
-  if(gameState.round > gameState.maxRounds) {
-    const w = gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0;
-    endGame(w); return;
-  }
+  if(gameState.round > gameState.maxRounds) { endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); return; }
   const word = WORDS[Math.floor(Math.random()*WORDS.length)];
   const scrambled = scrambleWord(word);
-  gameState.word = word;
-  gameState.scrambled = scrambled;
-  gameState.answered = {};
-  send({ type:'game_move', game:'word', action:'newround', round:gameState.round, word, scrambled });
-
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;">
-      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
-      <div class="speed-question" style="letter-spacing:6px;">${scrambled}</div>
-      <input class="speed-input" type="text" id="wordAnswer" placeholder="الكلمة..." onkeypress="if(event.key==='Enter')submitWord()">
-      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitWord()">إرسال ⚡</button>
-      <div id="wordResult" style="margin-top:15px;font-weight:700;"></div>
-    </div>
-  `;
+  gameState.word = word; gameState.scrambled = scrambled; gameState.answered = {};
+  sendMove({ wordAction:'newround', round:gameState.round, word, scrambled });
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;"><p>الجولة ${gameState.round} من ${gameState.maxRounds}</p><div class="speed-question" style="letter-spacing:6px;">${scrambled}</div><input class="speed-input" type="text" id="wordAnswer" placeholder="الكلمة..." onkeypress="if(event.key==='Enter')submitWord()"><button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitWord()">إرسال ⚡</button><div id="wordResult" style="margin-top:15px;font-weight:700;"></div></div>`;
 }
-
 function submitWord() {
   if(gameState.answered[myPlayerNum]) return;
   const ans = document.getElementById('wordAnswer').value.trim();
   const correct = ans === gameState.word;
   gameState.answered[myPlayerNum] = correct;
   if(correct) { if(myPlayerNum===1) gameState.p1Score++; else gameState.p2Score++; }
-  send({ type:'game_move', game:'word', action:'answer', player:myPlayerNum, correct });
+  sendMove({ wordAction:'answer', player:myPlayerNum, correct });
   document.getElementById('wordResult').textContent = correct ? `✅ صحيح! ${gameState.word}` : `❌ كانت: ${gameState.word}`;
   document.getElementById('wordResult').style.color = correct ? '#4ade80' : '#f87171';
-  document.getElementById('wordAnswer').disabled = true;
-  checkWordRound();
+  document.getElementById('wordAnswer').disabled = true; checkWordRound();
 }
-
 function handleWordMove(data) {
-  if(data.action==='newround') {
-    gameState.round=data.round; gameState.word=data.word; gameState.scrambled=data.scrambled; gameState.answered={};
-    startWordRound();
-  } else if(data.action==='answer') {
-    gameState.answered[data.player]=data.correct;
-    if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;}
-    checkWordRound();
-  }
+  if(data.wordAction==='newround') { gameState.round=data.round; gameState.word=data.word; gameState.scrambled=data.scrambled; gameState.answered={}; startWordRound(); }
+  else if(data.wordAction==='answer') { gameState.answered[data.player]=data.correct; if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;} checkWordRound(); }
 }
-
-function checkWordRound() {
-  if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) {
-    gameState.round++;
-    setTimeout(()=>startWordRound(), 1800);
-  }
-}
+function checkWordRound() { if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) { gameState.round++; setTimeout(()=>startWordRound(), 1800); } }
 
 function startEmojiRound() {
-  if(gameState.round > gameState.maxRounds) {
-    const w = gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0;
-    endGame(w); return;
-  }
+  if(gameState.round > gameState.maxRounds) { endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); return; }
   const q = EMOJI_QUIZ[Math.floor(Math.random()*EMOJI_QUIZ.length)];
-  gameState.question = q;
-  gameState.answered = {};
-  send({ type:'game_move', game:'emoji', action:'newround', round:gameState.round, q });
-
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;">
-      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
-      <p>ما هذا الفيلم؟</p>
-      <div class="speed-question" style="font-size:45px;">${q.emoji}</div>
-      <input class="speed-input" type="text" id="emojiAnswer" placeholder="الإجابة..." onkeypress="if(event.key==='Enter')submitEmoji()">
-      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitEmoji()">إرسال ⚡</button>
-      <div id="emojiResult" style="margin-top:15px;font-weight:700;"></div>
-    </div>
-  `;
+  gameState.question = q; gameState.answered = {};
+  sendMove({ emojiAction:'newround', round:gameState.round, q });
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;"><p>الجولة ${gameState.round} من ${gameState.maxRounds}</p><p>ما هذا الفيلم؟</p><div class="speed-question" style="font-size:45px;">${q.emoji}</div><input class="speed-input" type="text" id="emojiAnswer" placeholder="الإجابة..." onkeypress="if(event.key==='Enter')submitEmoji()"><button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitEmoji()">إرسال ⚡</button><div id="emojiResult" style="margin-top:15px;font-weight:700;"></div></div>`;
 }
-
 function submitEmoji() {
   if(gameState.answered[myPlayerNum]) return;
   const ans = document.getElementById('emojiAnswer').value.trim();
   const correct = ans.includes(gameState.question.answer) || gameState.question.answer.includes(ans);
   gameState.answered[myPlayerNum] = correct;
   if(correct) { if(myPlayerNum===1) gameState.p1Score++; else gameState.p2Score++; }
-  send({ type:'game_move', game:'emoji', action:'answer', player:myPlayerNum, correct });
+  sendMove({ emojiAction:'answer', player:myPlayerNum, correct });
   document.getElementById('emojiResult').textContent = correct ? `✅ ${gameState.question.answer}` : `❌ ${gameState.question.answer}`;
   document.getElementById('emojiResult').style.color = correct ? '#4ade80' : '#f87171';
-  document.getElementById('emojiAnswer').disabled = true;
-  checkEmojiRound();
+  document.getElementById('emojiAnswer').disabled = true; checkEmojiRound();
 }
-
 function handleEmojiMove(data) {
-  if(data.action==='newround') {
-    gameState.round=data.round; gameState.question=data.q; gameState.answered={};
-    startEmojiRound();
-  } else if(data.action==='answer') {
-    gameState.answered[data.player]=data.correct;
-    if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;}
-    checkEmojiRound();
-  }
+  if(data.emojiAction==='newround') { gameState.round=data.round; gameState.question=data.q; gameState.answered={}; startEmojiRound(); }
+  else if(data.emojiAction==='answer') { gameState.answered[data.player]=data.correct; if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;} checkEmojiRound(); }
 }
-
-function checkEmojiRound() {
-  if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) {
-    gameState.round++;
-    setTimeout(()=>startEmojiRound(), 1800);
-  }
-}
+function checkEmojiRound() { if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) { gameState.round++; setTimeout(()=>startEmojiRound(), 1800); } }
 
 function startColorRound() {
-  if(gameState.round > gameState.maxRounds) {
-    const w = gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0;
-    endGame(w); return;
-  }
+  if(gameState.round > gameState.maxRounds) { endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); return; }
   const correct = COLORS[Math.floor(Math.random()*COLORS.length)];
   const options = [correct];
-  while(options.length < 4) {
-    const c = COLORS[Math.floor(Math.random()*COLORS.length)];
-    if(!options.find(o=>o.name===c.name)) options.push(c);
-  }
+  while(options.length < 4) { const c = COLORS[Math.floor(Math.random()*COLORS.length)]; if(!options.find(o=>o.name===c.name)) options.push(c); }
   options.sort(()=>Math.random()-0.5);
-  gameState.question = { correct: correct.name, options };
-  gameState.answered = {};
-  send({ type:'game_move', game:'color', action:'newround', round:gameState.round, q: gameState.question });
-
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;">
-      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
-      <p>ما اسم هذا اللون؟</p>
-      <div style="width:130px;height:130px;border-radius:18px;margin:0 auto 18px;background:${correct.hex};"></div>
-      <div class="speed-options">
-        ${options.map((o,i) => `<div class="speed-opt" onclick="submitColor('${o.name}',this)">${o.name}</div>`).join('')}
-      </div>
-      <div id="colorResult" style="margin-top:15px;font-weight:700;"></div>
-    </div>
-  `;
+  gameState.question = { correct: correct.name, options }; gameState.answered = {};
+  sendMove({ colorAction:'newround', round:gameState.round, q: gameState.question });
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;"><p>الجولة ${gameState.round} من ${gameState.maxRounds}</p><p>ما اسم هذا اللون؟</p><div style="width:130px;height:130px;border-radius:18px;margin:0 auto 18px;background:${correct.hex};"></div><div class="speed-options">${options.map((o,i) => `<div class="speed-opt" onclick="submitColor('${o.name}',this)">${o.name}</div>`).join('')}</div><div id="colorResult" style="margin-top:15px;font-weight:700;"></div></div>`;
 }
-
 function submitColor(name, el) {
   if(gameState.answered[myPlayerNum]) return;
   const correct = name === gameState.question.correct;
   gameState.answered[myPlayerNum] = correct;
   if(correct) { if(myPlayerNum===1) gameState.p1Score++; else gameState.p2Score++; }
   el.classList.add(correct?'correct':'wrong');
-  send({ type:'game_move', game:'color', action:'answer', player:myPlayerNum, correct });
+  sendMove({ colorAction:'answer', player:myPlayerNum, correct });
   document.getElementById('colorResult').textContent = correct ? '✅ صحيح!' : `❌ ${gameState.question.correct}`;
   document.getElementById('colorResult').style.color = correct ? '#4ade80' : '#f87171';
   checkColorRound();
 }
-
 function handleColorMove(data) {
-  if(data.action==='newround') {
-    gameState.round=data.round; gameState.question=data.q; gameState.answered={};
-    startColorRound();
-  } else if(data.action==='answer') {
-    gameState.answered[data.player]=data.correct;
-    if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;}
-    checkColorRound();
-  }
+  if(data.colorAction==='newround') { gameState.round=data.round; gameState.question=data.q; gameState.answered={}; startColorRound(); }
+  else if(data.colorAction==='answer') { gameState.answered[data.player]=data.correct; if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;} checkColorRound(); }
 }
-
-function checkColorRound() {
-  if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) {
-    gameState.round++;
-    setTimeout(()=>startColorRound(), 1300);
-  }
-}
+function checkColorRound() { if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) { gameState.round++; setTimeout(()=>startColorRound(), 1300); } }
 
 function startQuizRound() {
-  if(gameState.round > gameState.maxRounds) {
-    const w = gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0;
-    endGame(w); return;
-  }
+  if(gameState.round > gameState.maxRounds) { endGame(gameState.p1Score>gameState.p2Score?1:gameState.p2Score>gameState.p1Score?2:0); return; }
   const q = QUIZ_QS[Math.floor(Math.random()*QUIZ_QS.length)];
-  gameState.question = q;
-  gameState.answered = {};
-  send({ type:'game_move', game:'quiz', action:'newround', round:gameState.round, q });
-
-  document.getElementById('gameContent').innerHTML = `
-    <div style="text-align:center;">
-      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
-      <div class="speed-question" style="font-size:18px;">${q.q}</div>
-      <div class="speed-options">
-        ${q.opts.map((o,i) => `<div class="speed-opt" onclick="submitQuiz(${i},this)">${o}</div>`).join('')}
-      </div>
-      <div id="quizResult" style="margin-top:15px;font-weight:700;"></div>
-    </div>
-  `;
+  gameState.question = q; gameState.answered = {};
+  sendMove({ quizAction:'newround', round:gameState.round, q });
+  document.getElementById('gameContent').innerHTML = `<div style="text-align:center;"><p>الجولة ${gameState.round} من ${gameState.maxRounds}</p><div class="speed-question" style="font-size:18px;">${q.q}</div><div class="speed-options">${q.opts.map((o,i) => `<div class="speed-opt" onclick="submitQuiz(${i},this)">${o}</div>`).join('')}</div><div id="quizResult" style="margin-top:15px;font-weight:700;"></div></div>`;
 }
-
 function submitQuiz(idx, el) {
   if(gameState.answered[myPlayerNum]) return;
   const correct = idx === gameState.question.ans;
   gameState.answered[myPlayerNum] = correct;
   if(correct) { if(myPlayerNum===1) gameState.p1Score++; else gameState.p2Score++; }
   el.classList.add(correct?'correct':'wrong');
-  send({ type:'game_move', game:'quiz', action:'answer', player:myPlayerNum, correct });
+  sendMove({ quizAction:'answer', player:myPlayerNum, correct });
   document.getElementById('quizResult').textContent = correct ? '✅ صحيح! 💕' : '❌ خطأ!';
   document.getElementById('quizResult').style.color = correct ? '#4ade80' : '#f87171';
   checkQuizRound();
 }
-
 function handleQuizMove(data) {
-  if(data.action==='newround') {
-    gameState.round=data.round; gameState.question=data.q; gameState.answered={};
-    startQuizRound();
-  } else if(data.action==='answer') {
-    gameState.answered[data.player]=data.correct;
-    if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;}
-    checkQuizRound();
-  }
+  if(data.quizAction==='newround') { gameState.round=data.round; gameState.question=data.q; gameState.answered={}; startQuizRound(); }
+  else if(data.quizAction==='answer') { gameState.answered[data.player]=data.correct; if(data.correct){if(data.player===1)gameState.p1Score++;else gameState.p2Score++;} checkQuizRound(); }
 }
-
-function checkQuizRound() {
-  if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) {
-    gameState.round++;
-    setTimeout(()=>startQuizRound(), 1300);
-  }
-}
-
-function handleGameMove(data) {
-  switch(data.game) {
-    case 'xo': handleXOMove(data); break;
-    case 'c4': handleC4Move(data); break;
-    case 'rps': handleRPSMove(data); break;
-    case 'memory': handleMemMove(data); break;
-    case 'math': handleMathMove(data); break;
-    case 'reaction': handleReactionMove(data); break;
-    case 'word': handleWordMove(data); break;
-    case 'emoji': handleEmojiMove(data); break;
-    case 'color': handleColorMove(data); break;
-    case 'quiz': handleQuizMove(data); break;
-  }
-}
+function checkQuizRound() { if(gameState.answered[1]!==undefined && gameState.answered[2]!==undefined) { gameState.round++; setTimeout(()=>startQuizRound(), 1300); } }
 
 // ==================== WHEEL ====================
 let wheelSpinning = false;
-
 function showWheel() {
   document.getElementById('resultModal').classList.remove('active');
   document.getElementById('wheelOverlay').classList.add('active');
   document.getElementById('wheelResult').textContent = 'اضغط "لف العجلة" 💕';
   document.getElementById('spinBtn').disabled = false;
-  wheelSpinning = false;
-  drawWheel(0);
+  wheelSpinning = false; drawWheel(0);
 }
-
 function drawWheel(rotation) {
   const canvas = document.getElementById('wheelCanvas');
   const ctx = canvas.getContext('2d');
   const cx = canvas.width/2, cy = canvas.height/2, r = canvas.width/2 - 8;
-  const n = PUNISHMENTS.length;
-  const arc = (2*Math.PI)/n;
-
+  const n = PUNISHMENTS.length, arc = (2*Math.PI)/n;
   ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.save();
-  ctx.translate(cx,cy);
-  ctx.rotate(rotation);
-
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(rotation);
   for(let i=0;i<n;i++) {
     const angle = i*arc;
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.arc(0,0,r,angle,angle+arc);
-    ctx.closePath();
-    ctx.fillStyle = WHEEL_COLORS[i];
-    ctx.fill();
-    ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    ctx.save();
-    ctx.rotate(angle + arc/2);
-    ctx.textAlign = 'right';
-    ctx.fillStyle = '#fff';
-    ctx.font = 'bold 10px Tajawal';
-    ctx.fillText(PUNISHMENTS[i].substring(0,14) + '...', r-12, 4);
-    ctx.restore();
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.arc(0,0,r,angle,angle+arc); ctx.closePath();
+    ctx.fillStyle = WHEEL_COLORS[i]; ctx.fill(); ctx.strokeStyle = 'rgba(0,0,0,0.3)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.save(); ctx.rotate(angle + arc/2); ctx.textAlign = 'right'; ctx.fillStyle = '#fff'; ctx.font = 'bold 10px Tajawal';
+    ctx.fillText(PUNISHMENTS[i].substring(0,14) + '...', r-12, 4); ctx.restore();
   }
   ctx.restore();
-
-  ctx.beginPath();
-  ctx.arc(cx,cy,18,0,2*Math.PI);
-  ctx.fillStyle = '#1a1028';
-  ctx.fill();
-  ctx.strokeStyle = '#ffd700';
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  ctx.fillStyle = '#ffd700';
-  ctx.font = '14px Tajawal';
-  ctx.textAlign = 'center';
-  ctx.fillText('💕', cx, cy+5);
+  ctx.beginPath(); ctx.arc(cx,cy,18,0,2*Math.PI); ctx.fillStyle = '#1a1028'; ctx.fill(); ctx.strokeStyle = '#ffd700'; ctx.lineWidth = 2; ctx.stroke();
+  ctx.fillStyle = '#ffd700'; ctx.font = '14px Tajawal'; ctx.textAlign = 'center'; ctx.fillText('💕', cx, cy+5);
 }
-
 function spinWheel() {
   if(wheelSpinning) return;
-  wheelSpinning = true;
-  document.getElementById('spinBtn').disabled = true;
+  wheelSpinning = true; document.getElementById('spinBtn').disabled = true;
   document.getElementById('wheelResult').textContent = '🎰 جاري اللف...';
-
   const totalRotation = Math.PI*2*5 + Math.random()*Math.PI*2;
-  const duration = 3500;
-  const start = performance.now();
-
+  const duration = 3500, start = performance.now();
   function animate(now) {
     const elapsed = now - start;
     const progress = Math.min(elapsed/duration, 1);
     const eased = 1 - Math.pow(1-progress, 3);
     drawWheel(totalRotation * eased);
-
     if(progress < 1) requestAnimationFrame(animate);
     else {
-      const n = PUNISHMENTS.length;
-      const arc = (2*Math.PI)/n;
+      const n = PUNISHMENTS.length, arc = (2*Math.PI)/n;
       const normalizedAngle = (2*Math.PI - (totalRotation % (2*Math.PI))) % (2*Math.PI);
       const idx = Math.floor(normalizedAngle / arc) % n;
       document.getElementById('wheelResult').textContent = PUNISHMENTS[idx];
@@ -1877,11 +948,7 @@ function spinWheel() {
   }
   requestAnimationFrame(animate);
 }
-
-function closeWheel() {
-  document.getElementById('wheelOverlay').classList.remove('active');
-  backToLobby();
-}
+function closeWheel() { document.getElementById('wheelOverlay').classList.remove('active'); backToLobby(); }
 </script>
 </body>
 </html>
