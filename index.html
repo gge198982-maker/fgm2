@@ -50,12 +50,12 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .vs-text{font-weight:900;color:var(--gold);font-size:18px;}
 .score-display{font-size:14px;color:#d0c0e8;font-weight:600;padding:7px 14px;border-radius:10px;background:rgba(255,255,255,0.05);}
 .lobby-title{font-size:22px;font-weight:800;margin-bottom:18px;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;width:100%;}
-.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px;width:100%;max-width:600px;margin:0 auto;}
-.game-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:30px 20px;cursor:pointer;transition:transform 0.25s;text-align:center;}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;width:100%;max-width:900px;}
+.game-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px 18px;cursor:pointer;transition:transform 0.25s;text-align:center;}
 .game-card:hover{transform:translateY(-5px);border-color:var(--purple);}
-.game-card .icon{font-size:50px;margin-bottom:12px;}
-.game-card .name{font-size:20px;font-weight:800;margin-bottom:6px;}
-.game-card .desc{font-size:14px;color:#a090b8;}
+.game-card .icon{font-size:40px;margin-bottom:10px;}
+.game-card .name{font-size:17px;font-weight:800;margin-bottom:5px;}
+.game-card .desc{font-size:12px;color:#a090b8;}
 .chat-toggle{position:fixed;bottom:22px;left:22px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));border:none;color:white;font-size:24px;cursor:pointer;z-index:101;}
 .chat-panel{position:fixed;bottom:90px;left:22px;width:320px;z-index:100;}
 .chat-box{display:none;background:rgba(15,10,24,0.97);border:1px solid rgba(196,77,255,0.3);border-radius:18px;overflow:hidden;}
@@ -83,6 +83,8 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .c4-cell:hover{background:rgba(196,77,255,0.12);}
 .c4-cell.p1{background:var(--pink);box-shadow:0 0 15px var(--pink);}
 .c4-cell.p2{background:var(--purple);box-shadow:0 0 15px var(--purple);}
+.speed-question{text-align:center;padding:25px;font-size:26px;font-weight:800;background:rgba(255,255,255,0.05);border-radius:16px;margin:15px 0;}
+.speed-input{width:100%;max-width:280px;padding:13px;border-radius:12px;border:2px solid rgba(196,77,255,0.3);background:rgba(255,255,255,0.05);color:white;font-size:20px;text-align:center;font-family:'Tajawal';outline:none;margin:10px auto;display:block;}
 .wheel-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:200;flex-direction:column;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
 .wheel-overlay.active{display:flex;}
 .wheel-title{font-size:28px;font-weight:900;margin-bottom:10px;background:linear-gradient(135deg,var(--gold),#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;}
@@ -106,10 +108,10 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .developer-footer .love-line{display:none;}
 .developer-footer.connected .love-line{display:inline;}
 @media(max-width:600px){
-.games-grid{grid-template-columns:1fr;gap:15px;}
-.game-card{padding:25px 15px;}
-.game-card .icon{font-size:40px;}
-.game-card .name{font-size:18px;}
+.games-grid{grid-template-columns:1fr 1fr;gap:10px;}
+.game-card{padding:16px 10px;}
+.game-card .icon{font-size:30px;}
+.game-card .name{font-size:14px;}
 .chat-panel{width:calc(100% - 40px);left:20px;}
 .lobby-header{flex-direction:column;gap:10px;padding:13px;}
 .wheel-container,.wheel-canvas{width:260px;height:260px;}
@@ -190,9 +192,6 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 </div>
 
 <script>
-// ============================================
-// 🔥 Firebase Configuration
-// ============================================
 const firebaseConfig = {
   apiKey: "AIzaSyDkUG16cB2az4fDUpDSpkMS8QXYYRt3xNE",
   authDomain: "love-games-aqil.firebaseapp.com",
@@ -206,17 +205,16 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-// ============================================
-// 🎮 Global State
-// ============================================
 let myName = '', partnerName = '', isHost = false, myPlayerNum = 0;
 let scores = [0, 0], currentGame = null, gameState = {}, chatOpen = false;
 let currentRoomId = null, roomRef = null, listenersAttached = false;
 
-// ✅ الألعاب المتبقية فقط
 const GAMES = [
-  { id: 'xo', icon: '❌⭕', name: 'إكس أو', desc: 'الكلاسيكية المحبوبة' },
-  { id: 'c4', icon: '🔴🟣', name: 'أربع خطوط', desc: 'وصّل 4 في صف واحد' },
+  { id: 'xo', icon: '❌⭕', name: 'إكس أو', desc: 'الكلاسيكية' },
+  { id: 'c4', icon: '🔴🟣', name: 'أربع خطوط', desc: 'وصّل 4' },
+  { id: 'emoji', icon: '😍🎭', name: 'توقع الكلمة', desc: 'من الإيموجي' },
+  { id: 'number', icon: '🔢🎯', name: 'تخمين الرقم', desc: 'من يخمن أولاً؟' },
+  { id: 'cpa', icon: '🏙️🌱🦁', name: 'مدينة نبات حيوان', desc: 'من حرف' },
 ];
 
 const PUNISHMENTS = [
@@ -244,9 +242,21 @@ const ROMANTIC_QUOTES = [
   '"في عينيك وجدت وطني" 🏡',
 ];
 
-// ============================================
-// 🚀 Initialization
-// ============================================
+const EMOJI_QUESTIONS = [
+  { emoji: '🦁👑', answer: 'الأسد الملك' },
+  { emoji: '🧊👸', answer: 'فروزن' },
+  { emoji: '🧜‍♀️🌊', answer: 'حورية البحر' },
+  { emoji: '🏰💤', answer: 'الأميرة النائمة' },
+  { emoji: '🕷️👨', answer: 'سبايدر مان' },
+  { emoji: '🦇🌃', answer: 'باتمان' },
+  { emoji: '🧙‍♂️💍', answer: 'سيد الخواتم' },
+  { emoji: '🚢❄️💔', answer: 'تايتانيك' },
+  { emoji: '👸🐸', answer: 'الأميرة والضفدع' },
+  { emoji: '🐭🧀', answer: 'توم وجيري' },
+];
+
+const CPA_LETTERS = ['ا', 'ب', 'ت', 'ث', 'ج', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ك', 'ل', 'م', 'ن', 'ه', 'و', 'ي'];
+
 window.addEventListener('load', () => {
   createHearts();
   renderGamesGrid();
@@ -300,6 +310,7 @@ function generateRoomCode() {
   return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
+// ✅ FIXED: Footer يعرض اسم الشريك في كلا الحالتين
 function updateFooter() {
   const f = document.getElementById('developerFooter');
   const l = document.getElementById('loverNameDisplay');
@@ -312,9 +323,6 @@ function updateFooter() {
   }
 }
 
-// ============================================
-// 🔥 Firebase Room Management
-// ============================================
 function createRoom() {
   myName = document.getElementById('playerName').value.trim();
   if (!myName) { showStatus('💔 اكتب اسمك أولاً!', 'error'); return; }
@@ -395,7 +403,6 @@ function attachRoomListeners() {
 
     roomRef.child('lastActivity').set(firebase.database.ServerValue.TIMESTAMP);
 
-    // ✅ FIXED: Correct partner name assignment
     if (!partnerName) {
       if (isHost && data.guest) {
         partnerName = data.guest;
@@ -445,9 +452,6 @@ function sendMessage(msgData) {
   });
 }
 
-// ============================================
-// 💬 Lobby & Chat
-// ============================================
 function enterLobby() {
   showScreen('screenLobby');
   document.getElementById('p1Name').textContent = isHost ? myName : partnerName;
@@ -485,9 +489,6 @@ function addChatMsg(sender, msg, isMine) {
   c.scrollTop = c.scrollHeight;
 }
 
-// ============================================
-// 🎮 Game Management
-// ============================================
 function startGame(gameId) {
   currentGame = gameId;
   gameState = initGameState(gameId);
@@ -500,6 +501,9 @@ function initGameState(id) {
   switch (id) {
     case 'xo': return { board: Array(9).fill(''), turn: 1 };
     case 'c4': return { board: Array(42).fill(0), turn: 1 };
+    case 'emoji': return { round: 1, maxRounds: 5, p1Score: 0, p2Score: 0, question: null, answered: {} };
+    case 'number': return { round: 1, maxRounds: 5, p1Score: 0, p2Score: 0, target: 0, p1Guess: null, p2Guess: null, chosen: false };
+    case 'cpa': return { round: 1, maxRounds: 5, p1Score: 0, p2Score: 0, letter: '', p1Answer: null, p2Answer: null, startTime: 0 };
     default: return {};
   }
 }
@@ -511,6 +515,9 @@ function initGame(gameId) {
   switch (gameId) {
     case 'xo': renderXO(); break;
     case 'c4': renderC4(); break;
+    case 'emoji': startEmojiRound(); break;
+    case 'number': startNumberRound(); break;
+    case 'cpa': startCPARound(); break;
   }
 }
 
@@ -607,12 +614,13 @@ function applyMove(data) {
   switch (data.game) {
     case 'xo': handleXOMove(data); break;
     case 'c4': handleC4Move(data); break;
+    case 'emoji': handleEmojiMove(data); break;
+    case 'number': handleNumberMove(data); break;
+    case 'cpa': handleCPAMove(data); break;
   }
 }
 
-// ============================================
-// 🎮 Game 1: XO (إكس أو)
-// ============================================
+// Game 1: XO
 function renderXO() {
   document.getElementById('gameContent').innerHTML = `
     <div style="text-align:center;margin-bottom:15px;">
@@ -666,9 +674,7 @@ function checkXOWin() {
   if (b.every(c => c)) setTimeout(() => endGame(0), 400);
 }
 
-// ============================================
-// 🎮 Game 2: Connect 4 (أربع خطوط)
-// ============================================
+// Game 2: Connect 4
 function renderC4() {
   document.getElementById('gameContent').innerHTML = `
     <div style="text-align:center;margin-bottom:15px;">
@@ -737,9 +743,242 @@ function checkC4Win() {
   if (b.every(c => c)) setTimeout(() => endGame(0), 400);
 }
 
-// ============================================
-// 🎡 Wheel of Fortune
-// ============================================
+// Game 3: Emoji Guess
+function startEmojiRound() {
+  if (gameState.round > gameState.maxRounds) {
+    endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0);
+    return;
+  }
+  if (isHost) {
+    const q = EMOJI_QUESTIONS[Math.floor(Math.random() * EMOJI_QUESTIONS.length)];
+    gameState.question = q;
+    gameState.answered = {};
+    sendMove({ emojiAction: 'newround', round: gameState.round, q });
+  }
+  renderEmojiUI();
+}
+
+function renderEmojiUI() {
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost ? myName : partnerName}: ${gameState.p1Score}</span> -
+        <span style="color:var(--purple)">${isHost ? partnerName : myName}: ${gameState.p2Score}</span>
+      </p>
+      <p style="margin:15px 0;">ما هذا الفيلم/القصة؟</p>
+      <div class="speed-question" style="font-size:50px;">${gameState.question.emoji}</div>
+      <input class="speed-input" type="text" id="emojiAnswer" placeholder="الإجابة..." onkeypress="if(event.key==='Enter')submitEmoji()">
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitEmoji()">إرسال ⚡</button>
+      <div id="emojiResult" style="margin-top:15px;font-weight:700;"></div>
+    </div>
+  `;
+}
+
+function submitEmoji() {
+  if (gameState.answered[myPlayerNum]) return;
+  const ans = document.getElementById('emojiAnswer').value.trim();
+  const correct = ans.includes(gameState.question.answer) || gameState.question.answer.includes(ans);
+  gameState.answered[myPlayerNum] = { answer: ans, correct };
+  if (correct) {
+    if (myPlayerNum === 1) gameState.p1Score++;
+    else gameState.p2Score++;
+  }
+  sendMove({ emojiAction: 'answer', player: myPlayerNum, answer: ans, correct });
+  document.getElementById('emojiResult').textContent = correct ? `✅ صحيح! ${gameState.question.answer}` : `❌ الإجابة: ${gameState.question.answer}`;
+  document.getElementById('emojiResult').style.color = correct ? '#4ade80' : '#f87171';
+  document.getElementById('emojiAnswer').disabled = true;
+  checkEmojiRound();
+}
+
+function handleEmojiMove(data) {
+  if (data.emojiAction === 'newround') {
+    gameState.round = data.round;
+    gameState.question = data.q;
+    gameState.answered = {};
+    renderEmojiUI();
+  } else if (data.emojiAction === 'answer') {
+    gameState.answered[data.player] = { answer: data.answer, correct: data.correct };
+    if (data.correct) {
+      if (data.player === 1) gameState.p1Score++;
+      else gameState.p2Score++;
+    }
+    checkEmojiRound();
+  }
+}
+
+function checkEmojiRound() {
+  if (gameState.answered[1] && gameState.answered[2]) {
+    gameState.round++;
+    setTimeout(() => startEmojiRound(), 2000);
+  }
+}
+
+// Game 4: Number Guess
+function startNumberRound() {
+  if (gameState.round > gameState.maxRounds) {
+    endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0);
+    return;
+  }
+  if (isHost) {
+    gameState.target = Math.floor(Math.random() * 100) + 1;
+    gameState.p1Guess = null;
+    gameState.p2Guess = null;
+    gameState.chosen = false;
+    sendMove({ numberAction: 'newround', round: gameState.round, target: gameState.target });
+  }
+  renderNumberUI();
+}
+
+function renderNumberUI() {
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost ? myName : partnerName}: ${gameState.p1Score}</span> -
+        <span style="color:var(--purple)">${isHost ? partnerName : myName}: ${gameState.p2Score}</span>
+      </p>
+      <p style="margin:15px 0;">خمن الرقم! (1-100)</p>
+      <input class="speed-input" type="number" id="numberGuess" placeholder="خمن..." min="1" max="100" onkeypress="if(event.key==='Enter')submitNumberGuess()">
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitNumberGuess()">خمن ⚡</button>
+      <div id="numberResult" style="margin-top:15px;font-weight:700;"></div>
+    </div>
+  `;
+}
+
+function submitNumberGuess() {
+  const guess = parseInt(document.getElementById('numberGuess').value);
+  if (!guess || guess < 1 || guess > 100) return;
+  if (myPlayerNum === 1) gameState.p1Guess = guess;
+  else gameState.p2Guess = guess;
+  sendMove({ numberAction: 'guess', player: myPlayerNum, guess });
+  document.getElementById('numberGuess').disabled = true;
+  document.getElementById('numberResult').textContent = '⏳ بانتظار ' + (partnerName || 'الخصم') + '...';
+  checkNumberRound();
+}
+
+function handleNumberMove(data) {
+  if (data.numberAction === 'newround') {
+    gameState.round = data.round;
+    gameState.target = data.target;
+    gameState.p1Guess = null;
+    gameState.p2Guess = null;
+    renderNumberUI();
+  } else if (data.numberAction === 'guess') {
+    if (data.player === 1) gameState.p1Guess = data.guess;
+    else gameState.p2Guess = data.guess;
+    checkNumberRound();
+  }
+}
+
+function checkNumberRound() {
+  if (gameState.p1Guess !== null && gameState.p2Guess !== null) {
+    const diff1 = Math.abs(gameState.p1Guess - gameState.target);
+    const diff2 = Math.abs(gameState.p2Guess - gameState.target);
+    let winner = 0;
+    if (diff1 < diff2) { winner = 1; gameState.p1Score++; }
+    else if (diff2 < diff1) { winner = 2; gameState.p2Score++; }
+
+    const n1 = isHost ? myName : partnerName, n2 = isHost ? partnerName : myName;
+    document.getElementById('numberResult').innerHTML = `
+      الرقم كان: ${gameState.target}<br>
+      ${n1}: ${gameState.p1Guess} (الفرق: ${diff1})<br>
+      ${n2}: ${gameState.p2Guess} (الفرق: ${diff2})<br>
+      ${winner === 0 ? 'تعادل! 🤝' : winner === 1 ? n1 + ' فاز! 🎉' : n2 + ' فاز! 🎉'}
+    `;
+    gameState.round++;
+    setTimeout(() => startNumberRound(), 3000);
+  }
+}
+
+// Game 5: City Plant Animal
+function startCPARound() {
+  if (gameState.round > gameState.maxRounds) {
+    endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0);
+    return;
+  }
+  if (isHost) {
+    gameState.letter = CPA_LETTERS[Math.floor(Math.random() * CPA_LETTERS.length)];
+    gameState.p1Answer = null;
+    gameState.p2Answer = null;
+    gameState.startTime = Date.now();
+    sendMove({ cpaAction: 'newround', round: gameState.round, letter: gameState.letter, startTime: gameState.startTime });
+  }
+  renderCPAUI();
+}
+
+function renderCPAUI() {
+  document.getElementById('gameContent').innerHTML = `
+    <div style="text-align:center;">
+      <p>الجولة ${gameState.round} من ${gameState.maxRounds}</p>
+      <p style="font-size:14px;color:#a090b8;">
+        <span style="color:var(--pink)">${isHost ? myName : partnerName}: ${gameState.p1Score}</span> -
+        <span style="color:var(--purple)">${isHost ? partnerName : myName}: ${gameState.p2Score}</span>
+      </p>
+      <div class="speed-question">الحرف: <span style="font-size:50px;color:var(--gold);">${gameState.letter}</span></div>
+      <p style="margin:15px 0;">اكتب: مدينة، نبات، حيوان</p>
+      <input class="speed-input" type="text" id="cpaCity" placeholder="مدينة..." style="margin-bottom:8px;">
+      <input class="speed-input" type="text" id="cpaPlant" placeholder="نبات..." style="margin-bottom:8px;">
+      <input class="speed-input" type="text" id="cpaAnimal" placeholder="حيوان...">
+      <button class="btn btn-primary btn-sm" style="margin-top:10px;" onclick="submitCPA()">إرسال ⚡</button>
+      <div id="cpaResult" style="margin-top:15px;font-weight:700;"></div>
+    </div>
+  `;
+}
+
+function submitCPA() {
+  if (gameState[myPlayerNum === 1 ? 'p1Answer' : 'p2Answer']) return;
+  const city = document.getElementById('cpaCity').value.trim();
+  const plant = document.getElementById('cpaPlant').value.trim();
+  const animal = document.getElementById('cpaAnimal').value.trim();
+  if (!city || !plant || !animal) {
+    alert('اكتب جميع الإجابات!');
+    return;
+  }
+  const answer = { city, plant, animal, time: Date.now() - gameState.startTime };
+  if (myPlayerNum === 1) gameState.p1Answer = answer;
+  else gameState.p2Answer = answer;
+  sendMove({ cpaAction: 'answer', player: myPlayerNum, answer });
+  document.getElementById('cpaResult').textContent = '✅ تم الإرسال! انتظر ' + (partnerName || 'الخصم');
+  document.getElementById('cpaCity').disabled = true;
+  document.getElementById('cpaPlant').disabled = true;
+  document.getElementById('cpaAnimal').disabled = true;
+  checkCPARound();
+}
+
+function handleCPAMove(data) {
+  if (data.cpaAction === 'newround') {
+    gameState.round = data.round;
+    gameState.letter = data.letter;
+    gameState.startTime = data.startTime;
+    gameState.p1Answer = null;
+    gameState.p2Answer = null;
+    renderCPAUI();
+  } else if (data.cpaAction === 'answer') {
+    if (data.player === 1) gameState.p1Answer = data.answer;
+    else gameState.p2Answer = data.answer;
+    checkCPARound();
+  }
+}
+
+function checkCPARound() {
+  if (gameState.p1Answer && gameState.p2Answer) {
+    const winner = gameState.p1Answer.time < gameState.p2Answer.time ? 1 : gameState.p1Answer.time > gameState.p2Answer.time ? 2 : 0;
+    if (winner === 1) gameState.p1Score++;
+    else if (winner === 2) gameState.p2Score++;
+
+    const n1 = isHost ? myName : partnerName, n2 = isHost ? partnerName : myName;
+    document.getElementById('cpaResult').innerHTML = `
+      ${n1}: ${gameState.p1Answer.city}, ${gameState.p1Answer.plant}, ${gameState.p1Answer.animal} (${(gameState.p1Answer.time / 1000).toFixed(1)}ث)<br>
+      ${n2}: ${gameState.p2Answer.city}, ${gameState.p2Answer.plant}, ${gameState.p2Answer.animal} (${(gameState.p2Answer.time / 1000).toFixed(1)}ث)<br>
+      ${winner === 0 ? 'تعادل! 🤝' : winner === 1 ? n1 + ' فاز! 🎉' : n2 + ' فاز! 🎉'}
+    `;
+    gameState.round++;
+    setTimeout(() => startCPARound(), 3000);
+  }
+}
+
+// Wheel
 let wheelSpinning = false;
 
 function drawWheel(rotation) {
@@ -815,9 +1054,7 @@ function closeWheel() {
   backToLobby();
 }
 
-// ============================================
-// 🧹 Cleanup Old Rooms
-// ============================================
+// Cleanup
 function cleanupOldRooms() {
   const oneHourAgo = Date.now() - (60 * 60 * 1000);
   db.ref('rooms').once('value').then(snapshot => {
