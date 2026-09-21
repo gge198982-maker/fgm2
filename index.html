@@ -642,8 +642,8 @@ function sendImage(event) {
   const file = event.target.files[0];
   if (!file) return;
   
-  if (file.size > 500000) {
-    alert('حجم الصورة كبير جداً! الحد الأقصى 500KB');
+  if (file.size > 5242880) {
+  alert('حجم الصورة كبير جداً! الحد الأقصى 5MB');
     event.target.value = '';
     return;
   }
@@ -653,7 +653,7 @@ function sendImage(event) {
     const img = new Image();
     img.onload = function() {
       const canvas = document.createElement('canvas');
-      const maxSize = 400;
+      const maxSize = 800;
       let width = img.width;
       let height = img.height;
       
@@ -674,7 +674,7 @@ function sendImage(event) {
       const ctx = canvas.getContext('2d');
       ctx.drawImage(img, 0, 0, width, height);
       
-      const compressedData = canvas.toDataURL('image/jpeg', 0.7);
+      const compressedData = canvas.toDataURL('image/jpeg', 0.85);
       sendMessage({ type: 'image', data: compressedData });
       addImageMsg(myName, compressedData, true);
     };
