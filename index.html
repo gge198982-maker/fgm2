@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>💕 ألعاب الحب - عقيل</title>
+<title>💕 ألعاب الحب</title>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <style>
@@ -11,10 +11,10 @@
 :root{--pink:#ff6b9d;--pink-soft:#ffb3d1;--purple:#c44dff;--darker:#0a0612;--text:#f5ecff;--gold:#ffd700;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Tajawal',sans-serif;background:var(--darker);color:var(--text);min-height:100vh;overflow-x:hidden;position:relative;}
-body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 30%,rgba(196,77,255,0.2) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(255,107,157,0.15) 0%,transparent 50%);pointer-events:none;z-index:0;}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 30%,rgba(196,77,255,0.15) 0%,transparent 50%),radial-gradient(ellipse at 80% 20%,rgba(255,107,157,0.1) 0%,transparent 50%);pointer-events:none;z-index:0;}
 .hearts-bg{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;}
-.heart-float{position:absolute;animation:floatUp linear infinite;}
-@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:0.25;}90%{opacity:0.25;}100%{transform:translateY(-10vh) rotate(360deg);opacity:0;}}
+.heart-float{position:absolute;animation:floatUp linear infinite;will-change:transform;}
+@keyframes floatUp{0%{transform:translateY(100vh) rotate(0deg);opacity:0;}10%{opacity:0.2;}90%{opacity:0.2;}100%{transform:translateY(-10vh) rotate(360deg);opacity:0;}}
 .screen{display:none;position:relative;z-index:1;min-height:100vh;padding:20px 20px 100px;}
 .screen.active{display:flex;flex-direction:column;align-items:center;}
 .login-container{max-width:450px;width:100%;margin-top:5vh;text-align:center;padding:35px 25px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:22px;box-shadow:0 15px 40px rgba(0,0,0,0.4);}
@@ -41,22 +41,24 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .status-msg.waiting{background:rgba(255,215,0,0.08);color:var(--gold);}
 .status-msg.error{background:rgba(255,50,50,0.08);color:#ff6b6b;}
 .status-msg.success{background:rgba(50,255,50,0.08);color:#6bff6b;}
-.lobby-header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-radius:18px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);margin-bottom:22px;flex-wrap:wrap;gap:10px;}
-.players-info{display:flex;gap:12px;align-items:center;}
-.player-badge{display:flex;align-items:center;gap:8px;padding:8px 15px;border-radius:25px;background:rgba(255,255,255,0.05);}
-.player-badge .dot{width:11px;height:11px;border-radius:50%;}
-.player-badge .dot.p1{background:var(--pink);box-shadow:0 0 8px var(--pink);}
-.player-badge .dot.p2{background:var(--purple);box-shadow:0 0 8px var(--purple);}
-.vs-text{font-weight:900;color:var(--gold);font-size:18px;}
-.score-display{font-size:14px;color:#d0c0e8;font-weight:600;padding:7px 14px;border-radius:10px;background:rgba(255,255,255,0.05);}
-.lobby-title{font-size:22px;font-weight:800;margin-bottom:18px;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;width:100%;}
-.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:15px;width:100%;max-width:900px;}
-.game-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:22px 18px;cursor:pointer;transition:transform 0.25s;text-align:center;}
-.game-card:hover{transform:translateY(-5px);border-color:var(--purple);}
-.game-card .icon{font-size:40px;margin-bottom:10px;}
-.game-card .name{font-size:17px;font-weight:800;margin-bottom:5px;}
-.game-card .desc{font-size:12px;color:#a090b8;}
-.chat-toggle{position:fixed;bottom:22px;left:22px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));border:none;color:white;font-size:24px;cursor:pointer;z-index:101;}
+.lobby-header{width:100%;max-width:900px;display:flex;justify-content:space-between;align-items:center;padding:20px 25px;border-radius:20px;background:linear-gradient(135deg,rgba(255,107,157,0.08),rgba(196,77,255,0.08));border:1px solid rgba(196,77,255,0.2);margin-bottom:25px;flex-wrap:wrap;gap:15px;box-shadow:0 8px 32px rgba(0,0,0,0.3);}
+.players-info{display:flex;gap:15px;align-items:center;}
+.player-badge{display:flex;align-items:center;gap:10px;padding:10px 18px;border-radius:30px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);font-weight:600;}
+.player-badge .dot{width:12px;height:12px;border-radius:50%;}
+.player-badge .dot.p1{background:var(--pink);box-shadow:0 0 10px var(--pink);}
+.player-badge .dot.p2{background:var(--purple);box-shadow:0 0 10px var(--purple);}
+.vs-text{font-weight:900;color:var(--gold);font-size:20px;text-shadow:0 0 10px rgba(255,215,0,0.5);}
+.score-display{font-size:16px;color:#d0c0e8;font-weight:700;padding:10px 18px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);}
+.lobby-title{font-size:24px;font-weight:900;margin-bottom:20px;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;width:100%;}
+.games-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:18px;width:100%;max-width:900px;}
+.game-card{background:linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:25px 20px;cursor:pointer;transition:all 0.3s;text-align:center;position:relative;overflow:hidden;}
+.game-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--pink),var(--purple));transform:scaleX(0);transition:transform 0.3s;}
+.game-card:hover::before{transform:scaleX(1);}
+.game-card:hover{transform:translateY(-6px);border-color:var(--purple);box-shadow:0 12px 40px rgba(196,77,255,0.3);}
+.game-card .icon{font-size:45px;margin-bottom:12px;display:block;}
+.game-card .name{font-size:18px;font-weight:800;margin-bottom:6px;color:#fff;}
+.game-card .desc{font-size:13px;color:#a090b8;}
+.chat-toggle{position:fixed;bottom:22px;left:22px;width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--pink),var(--purple));border:none;color:white;font-size:24px;cursor:pointer;z-index:101;box-shadow:0 6px 20px rgba(196,77,255,0.4);}
 .chat-panel{position:fixed;bottom:90px;left:22px;width:320px;z-index:100;}
 .chat-box{display:none;background:rgba(15,10,24,0.97);border:1px solid rgba(196,77,255,0.3);border-radius:18px;overflow:hidden;}
 .chat-box.open{display:flex;flex-direction:column;}
@@ -100,24 +102,33 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .result-text{font-size:24px;font-weight:900;margin-bottom:8px;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .result-sub{color:#c0b0d8;font-size:14px;margin-bottom:22px;}
 .result-buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
-.developer-footer{position:fixed;bottom:0;left:0;right:0;padding:10px 15px;background:linear-gradient(180deg,transparent,rgba(10,6,18,0.95));text-align:center;z-index:50;pointer-events:none;}
-.developer-footer .credit{font-size:13px;color:#a090b8;display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,0.03);border:1px solid rgba(196,77,255,0.15);border-radius:18px;flex-wrap:wrap;justify-content:center;}
-.developer-footer .heart-icon{color:var(--pink);animation:heartBeat 2s ease-in-out infinite;display:inline-block;}
-.developer-footer .dev-name{background:linear-gradient(135deg,var(--gold),#ffaa00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
-.developer-footer .lover-name{background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:700;}
+.developer-footer{position:fixed;bottom:0;left:0;right:0;padding:12px 15px;background:linear-gradient(180deg,transparent,rgba(10,6,18,0.98));text-align:center;z-index:50;pointer-events:none;}
+.developer-footer .credit{font-size:14px;color:#c0b0d8;display:inline-flex;align-items:center;gap:8px;padding:10px 20px;background:rgba(255,255,255,0.04);border:1px solid rgba(196,77,255,0.2);border-radius:20px;flex-wrap:wrap;justify-content:center;}
+.developer-footer .heart-icon{color:var(--pink);animation:heartBeat 2s ease-in-out infinite;display:inline-block;font-size:16px;}
 .developer-footer .love-line{display:none;}
 .developer-footer.connected .love-line{display:inline;}
+.developer-footer .host-name,.developer-footer .guest-name{background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:800;font-size:15px;}
+.about-modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.9);z-index:300;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+.about-modal.active{display:flex;}
+.about-content{background:linear-gradient(135deg,rgba(26,16,40,0.98),rgba(15,10,24,0.98));border:1px solid rgba(196,77,255,0.3);border-radius:24px;padding:40px;text-align:center;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+.about-title{font-size:32px;font-weight:900;background:linear-gradient(135deg,var(--pink),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:20px;}
+.about-section{margin-bottom:25px;text-align:right;}
+.about-section h3{font-size:20px;font-weight:800;color:var(--gold);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
+.about-section p{font-size:15px;line-height:1.8;color:#d0c0e8;}
+.about-close{margin-top:20px;}
 @media(max-width:600px){
-.games-grid{grid-template-columns:1fr 1fr;gap:10px;}
-.game-card{padding:16px 10px;}
-.game-card .icon{font-size:30px;}
-.game-card .name{font-size:14px;}
+.games-grid{grid-template-columns:1fr 1fr;gap:12px;}
+.game-card{padding:18px 12px;}
+.game-card .icon{font-size:32px;}
+.game-card .name{font-size:15px;}
 .chat-panel{width:calc(100% - 40px);left:20px;}
-.lobby-header{flex-direction:column;gap:10px;padding:13px;}
+.lobby-header{flex-direction:column;gap:12px;padding:15px;}
 .wheel-container,.wheel-canvas{width:260px;height:260px;}
 .main-title{font-size:28px;}
 .login-container{padding:25px 18px;}
 .room-code{font-size:32px;letter-spacing:8px;}
+.about-content{padding:25px 20px;}
+.about-title{font-size:26px;}
 }
 </style>
 </head>
@@ -136,6 +147,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 <div class="input-group"><label>🔑 رمز الغرفة</label><input type="text" id="roomCode" placeholder="0000" maxlength="4" style="text-align:center;letter-spacing:8px;font-size:22px;font-weight:900;" oninput="this.value=this.value.replace(/[^0-9]/g,'')"></div>
 <button class="btn btn-secondary" id="joinBtn" style="width:100%" onclick="joinRoom()">🚀 انضم للغرفة</button>
 <div id="loginStatus"></div>
+<div style="margin-top:20px;"><button class="btn btn-secondary btn-sm" onclick="showAbout()">ℹ️ حول الموقع</button></div>
 </div>
 </div>
 
@@ -150,6 +162,7 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 </div>
 <h2 class="lobby-title">✨ اختاروا لعبة معاً ✨</h2>
 <div class="games-grid" id="gamesGrid"></div>
+<div style="margin-top:25px;"><button class="btn btn-secondary btn-sm" onclick="showAbout()">ℹ️ حول الموقع</button></div>
 </div>
 
 <div class="screen" id="screenGame">
@@ -183,10 +196,37 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 <button class="btn btn-secondary btn-sm" style="margin-top:15px" onclick="closeWheel()">✅ تم تنفيذ الحكم - لعبة جديدة</button>
 </div>
 
+<div class="about-modal" id="aboutModal">
+<div class="about-content">
+<div class="about-title">ℹ️ حول الموقع</div>
+<div class="about-section">
+<h3>💻 المطور</h3>
+<p>تم تطوير هذا الموقع بكل حب وإتقان من قبل <strong style="color:var(--gold);">عقيل الخزعلي</strong>، مبرمج ومطور ويب محترف يتميز بالإبداع والابتكار في عالم البرمجة.</p>
+</div>
+<div class="about-section">
+<h3>🎯 الرؤية</h3>
+<p>هدف هذا الموقع هو جمع الأحبة في مكان واحد للاستمتاع بألعاب تنافسية ممتعة مع الحفاظ على التواصل المستمر من خلال المحادثة الفورية.</p>
+</div>
+<div class="about-section">
+<h3>✨ المميزات</h3>
+<p>• 5 ألعاب تنافسية متنوعة<br>• محادثة فورية بين اللاعبين<br>• عجلة الأحكام الرومانسية<br>• تصميم عصري وجذاب<br>• أداء سريع وسلس<br>• متوافق مع جميع الأجهزة</p>
+</div>
+<div class="about-section">
+<h3>🚀 التقنيات المستخدمة</h3>
+<p>تم بناء الموقع باستخدام أحدث التقنيات: HTML5, CSS3, JavaScript, Firebase Realtime Database لضمان أفضل أداء وتجربة مستخدم.</p>
+</div>
+<div class="about-section">
+<h3>💝 رسالة المطور</h3>
+<p>أتمنى لكم أوقاتاً سعيدة وممتعة مع من تحبون. هذا الموقع هو هدية متواضعة لكل الأحبة الذين يريدون قضاء وقت ممتع معاً.</p>
+</div>
+<button class="btn btn-primary about-close" onclick="closeAbout()">إغلاق</button>
+</div>
+</div>
+
 <div class="developer-footer" id="developerFooter">
 <div class="credit">
-<span>تم انشاء الموقع بواسطة</span><span class="dev-name">عقيل</span>
-<span class="love-line">وبكل حب لـ</span><span class="love-line lover-name" id="loverNameDisplay">💕</span>
+<span>الموقع أنشئ بواسطة الحب الكبير بين</span>
+<span class="love-line lover-name" id="loverNameDisplay"></span>
 <span class="heart-icon">❤️</span>
 </div>
 </div>
@@ -266,14 +306,14 @@ window.addEventListener('load', () => {
 function createHearts() {
   const bg = document.getElementById('heartsBg');
   const hearts = ['💕', '💜', '💗', '✨', '💫'];
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 5; i++) {
     const h = document.createElement('div');
     h.className = 'heart-float';
     h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
     h.style.left = Math.random() * 100 + '%';
-    h.style.animationDuration = (12 + Math.random() * 12) + 's';
+    h.style.animationDuration = (15 + Math.random() * 15) + 's';
     h.style.animationDelay = Math.random() * 10 + 's';
-    h.style.fontSize = (14 + Math.random() * 14) + 'px';
+    h.style.fontSize = (16 + Math.random() * 12) + 'px';
     bg.appendChild(h);
   }
 }
@@ -290,7 +330,7 @@ function rotateQuotes() {
 
 function renderGamesGrid() {
   document.getElementById('gamesGrid').innerHTML = GAMES.map(g =>
-    `<div class="game-card" onclick="startGame('${g.id}')"><div class="icon">${g.icon}</div><div class="name">${g.name}</div><div class="desc">${g.desc}</div></div>`
+    `<div class="game-card" onclick="startGame('${g.id}')"><span class="icon">${g.icon}</span><div class="name">${g.name}</div><div class="desc">${g.desc}</div></div>`
   ).join('');
 }
 
@@ -310,20 +350,26 @@ function generateRoomCode() {
   return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
-// ✅ FIXED: Footer يعرض اسم الشريك في كلا الحالتين
 function updateFooter() {
   const f = document.getElementById('developerFooter');
   const l = document.getElementById('loverNameDisplay');
   if (partnerName) {
-    // ✅ المنشئ يرى اسم الضيف
-    // ✅ الضيف يرى اسمه هو
-    const displayName = isHost ? partnerName : myName;
-    l.textContent = displayName;
+    const hostName = isHost ? myName : partnerName;
+    const guestName = isHost ? partnerName : myName;
+    l.innerHTML = `<span class="host-name">${hostName}</span> و <span class="guest-name">${guestName}</span>`;
     f.classList.add('connected');
   } else {
-    l.textContent = '💕';
+    l.textContent = '';
     f.classList.remove('connected');
   }
+}
+
+function showAbout() {
+  document.getElementById('aboutModal').classList.add('active');
+}
+
+function closeAbout() {
+  document.getElementById('aboutModal').classList.remove('active');
 }
 
 function createRoom() {
@@ -623,7 +669,6 @@ function applyMove(data) {
   }
 }
 
-// Game 1: XO
 function renderXO() {
   document.getElementById('gameContent').innerHTML = `
     <div style="text-align:center;margin-bottom:15px;">
@@ -677,7 +722,6 @@ function checkXOWin() {
   if (b.every(c => c)) setTimeout(() => endGame(0), 400);
 }
 
-// Game 2: Connect 4
 function renderC4() {
   document.getElementById('gameContent').innerHTML = `
     <div style="text-align:center;margin-bottom:15px;">
@@ -746,7 +790,6 @@ function checkC4Win() {
   if (b.every(c => c)) setTimeout(() => endGame(0), 400);
 }
 
-// Game 3: Emoji Guess
 function startEmojiRound() {
   if (gameState.round > gameState.maxRounds) {
     endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0);
@@ -817,7 +860,6 @@ function checkEmojiRound() {
   }
 }
 
-// Game 4: Number Guess
 function startNumberRound() {
   if (gameState.round > gameState.maxRounds) {
     endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0);
@@ -894,7 +936,6 @@ function checkNumberRound() {
   }
 }
 
-// Game 5: City Plant Animal
 function startCPARound() {
   if (gameState.round > gameState.maxRounds) {
     endGame(gameState.p1Score > gameState.p2Score ? 1 : gameState.p2Score > gameState.p1Score ? 2 : 0);
@@ -981,7 +1022,6 @@ function checkCPARound() {
   }
 }
 
-// Wheel
 let wheelSpinning = false;
 
 function drawWheel(rotation) {
@@ -1057,7 +1097,6 @@ function closeWheel() {
   backToLobby();
 }
 
-// Cleanup
 function cleanupOldRooms() {
   const oneHourAgo = Date.now() - (60 * 60 * 1000);
   db.ref('rooms').once('value').then(snapshot => {
